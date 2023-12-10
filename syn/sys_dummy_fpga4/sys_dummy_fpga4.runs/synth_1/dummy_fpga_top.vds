@@ -1,0 +1,447 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Sun Dec 10 14:27:29 2023
+# Process ID: 22332
+# Current directory: C:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.runs/synth_1
+# Command line: vivado.exe -log dummy_fpga_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source dummy_fpga_top.tcl
+# Log file: C:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.runs/synth_1/dummy_fpga_top.vds
+# Journal file: C:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.runs/synth_1\vivado.jou
+# Running On: DESKTOP-437H5VP, OS: Windows, CPU Frequency: 2496 MHz, CPU Physical cores: 6, Host memory: 34113 MB
+#-----------------------------------------------------------
+source dummy_fpga_top.tcl -notrace
+Command: read_checkpoint -auto_incremental -incremental C:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.srcs/utils_1/imports/synth_1/pe.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from C:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.srcs/utils_1/imports/synth_1/pe.dcp for incremental synthesis
+INFO: [Vivado 12-7989] Please ensure there are no constraint changes
+Command: synth_design -top dummy_fpga_top -part xc7a50tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a50t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a50t'
+INFO: [Device 21-403] Loading part xc7a50tcpg236-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 19196
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:04 . Memory (MB): peak = 1318.336 ; gain = 438.973
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-11121] redeclaration of ANSI port 'rv' is not allowed [C:/share/my-systolic/ssim/fifo.v:25]
+INFO: [Synth 8-11241] undeclared symbol 'clk', assumed default net type 'wire' [C:/share/my-systolic/ssim/iobuf.v:207]
+INFO: [Synth 8-11241] undeclared symbol 'obuf_sa0_rdata', assumed default net type 'wire' [C:/share/my-systolic/ssim/iobuf.v:381]
+INFO: [Synth 8-11241] undeclared symbol 'clk', assumed default net type 'wire' [C:/share/my-systolic/ssim/systolic4.v:124]
+INFO: [Synth 8-6157] synthesizing module 'dummy_fpga_top' [C:/share/my-systolic/ssim/sysdummy_fpga4.v:14]
+INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [C:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.runs/synth_1/.Xil/Vivado-22332-DESKTOP-437H5VP/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [C:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.runs/synth_1/.Xil/Vivado-22332-DESKTOP-437H5VP/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'systoric4' [C:/share/my-systolic/ssim/systolic4.v:14]
+INFO: [Synth 8-6157] synthesizing module 'iobuf' [C:/share/my-systolic/ssim/iobuf.v:11]
+INFO: [Synth 8-6157] synthesizing module 'buf_1r1w' [C:/share/my-systolic/ssim/buf_1r1w.v:11]
+INFO: [Synth 8-6155] done synthesizing module 'buf_1r1w' (0#1) [C:/share/my-systolic/ssim/buf_1r1w.v:11]
+WARNING: [Synth 8-689] width (1) of port connection 'ram_rdata' does not match port width (16) of module 'buf_1r1w' [C:/share/my-systolic/ssim/iobuf.v:381]
+INFO: [Synth 8-6155] done synthesizing module 'iobuf' (0#1) [C:/share/my-systolic/ssim/iobuf.v:11]
+INFO: [Synth 8-6157] synthesizing module 'pe' [C:/share/my-systolic/ssim/pe.v:11]
+INFO: [Synth 8-6157] synthesizing module 'dsp' [C:/share/my-systolic/ssim/dsp.v:11]
+INFO: [Synth 8-6155] done synthesizing module 'dsp' (0#1) [C:/share/my-systolic/ssim/dsp.v:11]
+INFO: [Synth 8-6157] synthesizing module 'fifo' [C:/share/my-systolic/ssim/fifo.v:11]
+INFO: [Synth 8-6157] synthesizing module 'fifo_1r1w' [C:/share/my-systolic/ssim/fifo_1r1w.v:11]
+INFO: [Synth 8-6155] done synthesizing module 'fifo_1r1w' (0#1) [C:/share/my-systolic/ssim/fifo_1r1w.v:11]
+INFO: [Synth 8-6155] done synthesizing module 'fifo' (0#1) [C:/share/my-systolic/ssim/fifo.v:11]
+INFO: [Synth 8-6155] done synthesizing module 'pe' (0#1) [C:/share/my-systolic/ssim/pe.v:11]
+INFO: [Synth 8-6155] done synthesizing module 'systoric4' (0#1) [C:/share/my-systolic/ssim/systolic4.v:14]
+INFO: [Synth 8-6155] done synthesizing module 'dummy_fpga_top' (0#1) [C:/share/my-systolic/ssim/sysdummy_fpga4.v:14]
+WARNING: [Synth 8-3848] Net clk in module/entity iobuf does not have driver. [C:/share/my-systolic/ssim/iobuf.v:207]
+WARNING: [Synth 8-3848] Net awe0 in module/entity iobuf does not have driver. [C:/share/my-systolic/ssim/iobuf.v:34]
+WARNING: [Synth 8-3848] Net bwe0 in module/entity iobuf does not have driver. [C:/share/my-systolic/ssim/iobuf.v:35]
+WARNING: [Synth 8-3848] Net awe1 in module/entity iobuf does not have driver. [C:/share/my-systolic/ssim/iobuf.v:36]
+WARNING: [Synth 8-3848] Net bwe1 in module/entity iobuf does not have driver. [C:/share/my-systolic/ssim/iobuf.v:37]
+WARNING: [Synth 8-3848] Net clk in module/entity iobuf does not have driver. [C:/share/my-systolic/ssim/iobuf.v:207]
+WARNING: [Synth 8-3848] Net clk in module/entity systoric4 does not have driver. [C:/share/my-systolic/ssim/systolic4.v:124]
+WARNING: [Synth 8-3848] Net rgb_led in module/entity dummy_fpga_top does not have driver. [C:/share/my-systolic/ssim/sysdummy_fpga4.v:20]
+WARNING: [Synth 8-7129] Port awe0 in module iobuf is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bwe0 in module iobuf is either unconnected or has no load
+WARNING: [Synth 8-7129] Port awe1 in module iobuf is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bwe1 in module iobuf is either unconnected or has no load
+WARNING: [Synth 8-7129] Port clkin in module iobuf is either unconnected or has no load
+WARNING: [Synth 8-7129] Port rgb_led[2] in module dummy_fpga_top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port rgb_led[1] in module dummy_fpga_top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port rgb_led[0] in module dummy_fpga_top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port interrupt_0 in module dummy_fpga_top is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:05 . Memory (MB): peak = 1431.207 ; gain = 551.844
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:02 ; elapsed = 00:00:05 . Memory (MB): peak = 1431.207 ; gain = 551.844
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:02 ; elapsed = 00:00:05 . Memory (MB): peak = 1431.207 ; gain = 551.844
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.022 . Memory (MB): peak = 1431.207 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [c:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc] for cell 'clknetwork'
+Finished Parsing XDC File [c:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc] for cell 'clknetwork'
+Parsing XDC File [C:/share/my-systolic/syn/systolic_io_pins.xdc]
+WARNING: [Constraints 18-619] A clock with name 'clkin' already exists, overwriting the previous clock with the same name. [C:/share/my-systolic/syn/systolic_io_pins.xdc:43]
+WARNING: [Vivado 12-627] No clocks matched 'clk_out1_clk_wiz_0'. [C:/share/my-systolic/syn/systolic_io_pins.xdc:46]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [C:/share/my-systolic/syn/systolic_io_pins.xdc:46]
+WARNING: [Vivado 12-627] No clocks matched 'clk_out1_clk_wiz_0'. [C:/share/my-systolic/syn/systolic_io_pins.xdc:47]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [C:/share/my-systolic/syn/systolic_io_pins.xdc:47]
+WARNING: [Vivado 12-627] No clocks matched 'clk_out1_clk_wiz_0'. [C:/share/my-systolic/syn/systolic_io_pins.xdc:48]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [C:/share/my-systolic/syn/systolic_io_pins.xdc:48]
+WARNING: [Vivado 12-627] No clocks matched 'clk_out1_clk_wiz_0'. [C:/share/my-systolic/syn/systolic_io_pins.xdc:49]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [C:/share/my-systolic/syn/systolic_io_pins.xdc:49]
+WARNING: [Vivado 12-627] No clocks matched 'clk_out1_clk_wiz_0'. [C:/share/my-systolic/syn/systolic_io_pins.xdc:50]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [C:/share/my-systolic/syn/systolic_io_pins.xdc:50]
+WARNING: [Vivado 12-627] No clocks matched 'clk_out1_clk_wiz_0'. [C:/share/my-systolic/syn/systolic_io_pins.xdc:51]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [C:/share/my-systolic/syn/systolic_io_pins.xdc:51]
+WARNING: [Vivado 12-627] No clocks matched 'clk_out1_clk_wiz_0'. [C:/share/my-systolic/syn/systolic_io_pins.xdc:52]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [C:/share/my-systolic/syn/systolic_io_pins.xdc:52]
+WARNING: [Vivado 12-627] No clocks matched 'clk_out1_clk_wiz_0'. [C:/share/my-systolic/syn/systolic_io_pins.xdc:53]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [C:/share/my-systolic/syn/systolic_io_pins.xdc:53]
+WARNING: [Vivado 12-627] No clocks matched 'clk_out1_clk_wiz_0'. [C:/share/my-systolic/syn/systolic_io_pins.xdc:54]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [C:/share/my-systolic/syn/systolic_io_pins.xdc:54]
+WARNING: [Vivado 12-627] No clocks matched 'clk_out1_clk_wiz_0'. [C:/share/my-systolic/syn/systolic_io_pins.xdc:55]
+INFO: [Vivado 12-626] No clocks found. Please use 'create_clock' or 'create_generated_clock' command to create clocks. [C:/share/my-systolic/syn/systolic_io_pins.xdc:55]
+Finished Parsing XDC File [C:/share/my-systolic/syn/systolic_io_pins.xdc]
+WARNING: [Project 1-498] One or more constraints failed evaluation while reading constraint file [C:/share/my-systolic/syn/systolic_io_pins.xdc] and the design contains unresolved black boxes. These constraints will be read post-synthesis (as long as their source constraint file is marked as used_in_implementation) and should be applied correctly then. You should review the constraints listed in the file [.Xil/dummy_fpga_top_propImpl.xdc] and check the run log file to verify that these constraints were correctly applied.
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/share/my-systolic/syn/systolic_io_pins.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/dummy_fpga_top_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/dummy_fpga_top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1529.242 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 1529.242 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:04 ; elapsed = 00:00:11 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a50tcpg236-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:04 ; elapsed = 00:00:11 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property IO_BUFFER_TYPE = NONE for clkin. (constraint file  c:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc, line 3).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for clkin. (constraint file  c:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc, line 4).
+Applied set_property KEEP_HIERARCHY = SOFT for clknetwork. (constraint file  auto generated constraint).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:04 ; elapsed = 00:00:11 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Preparing Guide Design
+---------------------------------------------------------------------------------
+CRITICAL WARNING: [Synth 8-6895] The reference checkpoint C:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.srcs/utils_1/imports/synth_1/pe.dcp is not suitable for use with incremental synthesis for this design. Please regenerate the checkpoint for this design with -incremental_synth switch in the same Vivado session that synth_design has been run. Synthesis will continue with the default flow
+---------------------------------------------------------------------------------
+Finished Doing Graph Differ : Time (s): cpu = 00:00:04 ; elapsed = 00:00:11 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Preparing Guide Design : Time (s): cpu = 00:00:04 ; elapsed = 00:00:11 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-6430] The Block RAM "buf_1r1w:/ram_reg" may get memory collision error if read and write address collide. Use attribute (* rw_addr_collision= "yes" *) to avoid collision 
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:11 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+
+
+Incremental Synthesis Report Summary:
+
+1. Incremental synthesis run: no
+
+   Reason for not running incremental synthesis : 
+
+
+INFO: [Synth 8-7130] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   33 Bit       Adders := 4     
+	   2 Input   10 Bit       Adders := 8     
+	   2 Input    8 Bit       Adders := 6     
+	   2 Input    4 Bit       Adders := 2     
+	   2 Input    3 Bit       Adders := 8     
+	   2 Input    2 Bit       Adders := 16    
++---XORs : 
+	               16 Bit    Wide XORs := 1     
++---Registers : 
+	               32 Bit    Registers := 8     
+	               16 Bit    Registers := 45    
+	               10 Bit    Registers := 16    
+	                8 Bit    Registers := 8     
+	                4 Bit    Registers := 2     
+	                3 Bit    Registers := 8     
+	                2 Bit    Registers := 24    
+	                1 Bit    Registers := 48    
++---RAMs : 
+	              16K Bit	(1024 X 16 bit)          RAMs := 8     
+	               64 Bit	(4 X 16 bit)          RAMs := 8     
++---Muxes : 
+	   2 Input   32 Bit        Muxes := 12    
+	   2 Input   16 Bit        Muxes := 20    
+	   2 Input   10 Bit        Muxes := 12    
+	   2 Input    8 Bit        Muxes := 6     
+	   2 Input    4 Bit        Muxes := 2     
+	   2 Input    1 Bit        Muxes := 36    
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 120 (col length:60)
+BRAMs: 150 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+DSP Report: Generating DSP systoric4/pe0_0/dsp/m_pre, operation Mode is: A*B.
+DSP Report: operator systoric4/pe0_0/dsp/m_pre is absorbed into DSP systoric4/pe0_0/dsp/m_pre.
+DSP Report: Generating DSP systoric4/pe1_0/dsp/m_pre, operation Mode is: A*B.
+DSP Report: operator systoric4/pe1_0/dsp/m_pre is absorbed into DSP systoric4/pe1_0/dsp/m_pre.
+DSP Report: Generating DSP systoric4/pe0_1/dsp/m_pre, operation Mode is: A*B.
+DSP Report: operator systoric4/pe0_1/dsp/m_pre is absorbed into DSP systoric4/pe0_1/dsp/m_pre.
+DSP Report: Generating DSP systoric4/pe1_1/dsp/m_pre, operation Mode is: A*B.
+DSP Report: operator systoric4/pe1_1/dsp/m_pre is absorbed into DSP systoric4/pe1_1/dsp/m_pre.
+WARNING: [Synth 8-7129] Port rgb_led[2] in module dummy_fpga_top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port rgb_led[1] in module dummy_fpga_top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port rgb_led[0] in module dummy_fpga_top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port interrupt_0 in module dummy_fpga_top is either unconnected or has no load
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_a0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_a0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+WARNING: [Synth 8-6430] The Block RAM "dummy_fpga_top/systoric4/iobuf/buf_a0/ram_reg" may get memory collision error if read and write address collide. Use attribute (* rw_addr_collision= "yes" *) to avoid collision 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_a1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_a1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+WARNING: [Synth 8-6430] The Block RAM "dummy_fpga_top/systoric4/iobuf/buf_a1/ram_reg" may get memory collision error if read and write address collide. Use attribute (* rw_addr_collision= "yes" *) to avoid collision 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_b0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_b0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+WARNING: [Synth 8-6430] The Block RAM "dummy_fpga_top/systoric4/iobuf/buf_b0/ram_reg" may get memory collision error if read and write address collide. Use attribute (* rw_addr_collision= "yes" *) to avoid collision 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_b1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_b1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+WARNING: [Synth 8-6430] The Block RAM "dummy_fpga_top/systoric4/iobuf/buf_b1/ram_reg" may get memory collision error if read and write address collide. Use attribute (* rw_addr_collision= "yes" *) to avoid collision 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_s0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_s0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+WARNING: [Synth 8-6430] The Block RAM "dummy_fpga_top/systoric4/iobuf/buf_s0/ram_reg" may get memory collision error if read and write address collide. Use attribute (* rw_addr_collision= "yes" *) to avoid collision 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_s1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_s1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+WARNING: [Synth 8-6430] The Block RAM "dummy_fpga_top/systoric4/iobuf/buf_s1/ram_reg" may get memory collision error if read and write address collide. Use attribute (* rw_addr_collision= "yes" *) to avoid collision 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_sa0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_sa0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+WARNING: [Synth 8-6430] The Block RAM "dummy_fpga_top/systoric4/iobuf/buf_sa0/ram_reg" may get memory collision error if read and write address collide. Use attribute (* rw_addr_collision= "yes" *) to avoid collision 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_sa1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_sa1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+WARNING: [Synth 8-6430] The Block RAM "dummy_fpga_top/systoric4/iobuf/buf_sa1/ram_reg" may get memory collision error if read and write address collide. Use attribute (* rw_addr_collision= "yes" *) to avoid collision 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_a0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_a1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_b0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_b1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_s0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_s1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_sa0/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+RAM Pipeline Warning: Read Address Register Found For RAM systoric4/iobuf/buf_sa1/ram_reg. We will not be able to pipeline it. This may degrade performance. 
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:05 ; elapsed = 00:00:13 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+ Sort Area is  systoric4/pe0_0/dsp/m_pre_0 : 0 0 : 1937 1937 : Used 1 time 0
+ Sort Area is  systoric4/pe0_1/dsp/m_pre_3 : 0 0 : 1937 1937 : Used 1 time 0
+ Sort Area is  systoric4/pe1_0/dsp/m_pre_2 : 0 0 : 1937 1937 : Used 1 time 0
+ Sort Area is  systoric4/pe1_1/dsp/m_pre_4 : 0 0 : 1937 1937 : Used 1 time 0
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Preliminary Mapping Report (see note below)
++---------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name    | RTL Object                      | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++---------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|dummy_fpga_top | systoric4/iobuf/buf_a0/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_a1/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_b0/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_b1/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_s0/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_s1/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_sa0/ram_reg | 1 K x 1(READ_FIRST)    | W |   | 1 K x 1(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_sa1/ram_reg | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
++---------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+Note: The table above is a preliminary report that shows the Block RAMs at the current stage of the synthesis flow. Some Block RAMs may be reimplemented as non Block RAM primitives later in the synthesis flow. Multiple instantiated Block RAMs are reported only once. 
+
+DSP: Preliminary Mapping Report (see note below. The ' indicates corresponding REG is set)
++------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name | DSP Mapping | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|dsp         | A*B         | 16     | 16     | -      | -      | 32     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dsp         | A*B         | 16     | 16     | -      | -      | 32     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dsp         | A*B         | 16     | 16     | -      | -      | 32     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dsp         | A*B         | 16     | 16     | -      | -      | 32     | 0    | 0    | -    | -    | -     | 0    | 0    | 
++------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-565] redefining clock 'clkin'
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:06 ; elapsed = 00:00:17 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:06 ; elapsed = 00:00:17 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Final Mapping Report
++---------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name    | RTL Object                      | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++---------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|dummy_fpga_top | systoric4/iobuf/buf_a0/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_a1/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_b0/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_b1/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_s0/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_s1/ram_reg  | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_sa0/ram_reg | 1 K x 1(READ_FIRST)    | W |   | 1 K x 1(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|dummy_fpga_top | systoric4/iobuf/buf_sa1/ram_reg | 1 K x 16(READ_FIRST)   | W |   | 1 K x 16(WRITE_FIRST)  |   | R | Port A and B     | 1      | 0      | 
++---------------+---------------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+INFO: [Synth 8-223] decloning instance 'systoric4/iobuf/buf_s0/ram_reg' (RAMB18E1) to 'systoric4/iobuf/buf_s1/ram_reg'
+INFO: [Synth 8-223] decloning instance 'systoric4/iobuf/buf_s1/ram_reg' (RAMB18E1) to 'systoric4/iobuf/buf_sa1/ram_reg'
+INFO: [Synth 8-7052] The timing for the instance systoric4/iobuf/buf_a0/ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance systoric4/iobuf/buf_a1/ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance systoric4/iobuf/buf_b0/ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance systoric4/iobuf/buf_b1/ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance systoric4/iobuf/buf_sa0/ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance systoric4/iobuf/buf_sa1/ram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:06 ; elapsed = 00:00:17 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:07 ; elapsed = 00:00:20 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:07 ; elapsed = 00:00:20 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:07 ; elapsed = 00:00:20 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:07 ; elapsed = 00:00:20 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:07 ; elapsed = 00:00:20 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:07 ; elapsed = 00:00:20 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++------+--------------+----------+
+|      |BlackBox name |Instances |
++------+--------------+----------+
+|1     |clk_wiz_0     |         1|
++------+--------------+----------+
+
+Report Cell Usage: 
++------+---------+------+
+|      |Cell     |Count |
++------+---------+------+
+|1     |clk_wiz  |     1|
+|2     |LUT1     |     1|
+|3     |LUT2     |     1|
+|4     |LUT3     |    15|
+|5     |LUT4     |    41|
+|6     |LUT5     |     1|
+|7     |LUT6     |    26|
+|8     |MUXF7    |    11|
+|9     |RAMB18E1 |     6|
+|10    |FDCE     |    50|
+|11    |IBUF     |     2|
+|12    |OBUF     |     1|
+|13    |OBUFT    |     3|
++------+---------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:07 ; elapsed = 00:00:20 . Memory (MB): peak = 1529.242 ; gain = 649.879
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 1 critical warnings and 15 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:04 ; elapsed = 00:00:19 . Memory (MB): peak = 1529.242 ; gain = 551.844
+Synthesis Optimization Complete : Time (s): cpu = 00:00:07 ; elapsed = 00:00:21 . Memory (MB): peak = 1529.242 ; gain = 649.879
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1529.242 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 17 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1529.242 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete | Checksum: a34407c
+INFO: [Common 17-83] Releasing license: Synthesis
+57 Infos, 46 Warnings, 1 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:08 ; elapsed = 00:00:24 . Memory (MB): peak = 1529.242 ; gain = 1042.938
+INFO: [runtcl-6] Synthesis results are not added to the cache due to CRITICAL_WARNING
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1529.242 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.runs/synth_1/dummy_fpga_top.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file dummy_fpga_top_utilization_synth.rpt -pb dummy_fpga_top_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Sun Dec 10 14:28:00 2023...

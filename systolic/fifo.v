@@ -22,22 +22,39 @@ module fifo(
 	);
 
 // push/pull counter for afifo
-wire rv;
 reg [2:0] en_cntr;
 
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
-        en_cntr <= 3'd0;
+        en_cntr <= 2'd0;
     else if (~is & we & rv & re)
         en_cntr <= en_cntr;
     else if (~is & rv & re)
-        en_cntr <= en_cntr - 3'd1;
-    else if (we & ~is & (en_cntr < 3'd4))
-        en_cntr <= en_cntr + 3'd1;
+        en_cntr <= en_cntr - 2'd1;
+    else if (we & ~is & (en_cntr < 2'd3))
+        en_cntr <= en_cntr + 2'd1;
 end
 
 assign rv = |en_cntr;
-assign ff = en_cntr[2];
+assign ff = (en_cntr > 2'd2);
+
+// get 1 more request when ~ff
+reg is_post;
+reg ff_post;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        is_post <= 1'b0;
+        ff_post <= 1'b0;
+	end
+	else begin
+        is_post <= is;
+        ff_post <= ff;
+	end
+end
+
+wire is_1shot = is & ~is_post;
+wire ff_1shot = ff & ~ff_post;
 
 // write counter 
 reg [1:0] wadr;
@@ -45,7 +62,7 @@ reg [1:0] wadr;
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
         wadr <= 2'd0;
-    else if (we & ~is & ~ff)
+    else if (we & ((~is & ~ff) | is_1shot | ff_1shot))
         wadr <= wadr + 2'd1;
 end
 

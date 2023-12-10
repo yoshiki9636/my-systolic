@@ -1,0 +1,182 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
+| Date         : Sun Dec 10 14:29:04 2023
+| Host         : DESKTOP-437H5VP running 64-bit major release  (build 9200)
+| Command      : report_methodology -file dummy_fpga_top_methodology_drc_routed.rpt -pb dummy_fpga_top_methodology_drc_routed.pb -rpx dummy_fpga_top_methodology_drc_routed.rpx
+| Design       : dummy_fpga_top
+| Device       : xc7a50tcpg236-1
+| Speed File   : -1
+| Design State : Fully Routed
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Report Methodology
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+             Max violations: <unlimited>
+             Violations found: 25
++-----------+----------+--------------------------------------------------------+------------+
+| Rule      | Severity | Description                                            | Violations |
++-----------+----------+--------------------------------------------------------+------------+
+| SYNTH-16  | Warning  | Address collision                                      | 6          |
+| TIMING-28 | Warning  | Auto-derived clock referenced by a timing constraint   | 10         |
+| XDCC-1    | Warning  | Scoped Clock constraint overwritten with the same name | 1          |
+| XDCC-7    | Warning  | Scoped Clock constraint overwritten on the same source | 1          |
+| XDCH-2    | Warning  | Same min and max delay values on IO port               | 7          |
++-----------+----------+--------------------------------------------------------+------------+
+
+2. REPORT DETAILS
+-----------------
+SYNTH-16#1 Warning
+Address collision  
+Block RAM systoric4/iobuf/buf_a0/ram_reg may get memory collision error if read and write address collide. Use of address collision resolution circuitry is recommended.
+Related violations: <none>
+
+SYNTH-16#2 Warning
+Address collision  
+Block RAM systoric4/iobuf/buf_a1/ram_reg may get memory collision error if read and write address collide. Use of address collision resolution circuitry is recommended.
+Related violations: <none>
+
+SYNTH-16#3 Warning
+Address collision  
+Block RAM systoric4/iobuf/buf_b0/ram_reg may get memory collision error if read and write address collide. Use of address collision resolution circuitry is recommended.
+Related violations: <none>
+
+SYNTH-16#4 Warning
+Address collision  
+Block RAM systoric4/iobuf/buf_b1/ram_reg may get memory collision error if read and write address collide. Use of address collision resolution circuitry is recommended.
+Related violations: <none>
+
+SYNTH-16#5 Warning
+Address collision  
+Block RAM systoric4/iobuf/buf_sa0/ram_reg may get memory collision error if read and write address collide. Use of address collision resolution circuitry is recommended.
+Related violations: <none>
+
+SYNTH-16#6 Warning
+Address collision  
+Block RAM systoric4/iobuf/buf_sa1/ram_reg may get memory collision error if read and write address collide. Use of address collision resolution circuitry is recommended.
+Related violations: <none>
+
+TIMING-28#1 Warning
+Auto-derived clock referenced by a timing constraint  
+The auto-derived clock clk_out1_clk_wiz_0 is referenced by name inside timing constraint (see constraint position 10 in the Timing Constraint window in Vivado IDE). It is recommended to reference an auto-derived clock by the pin name attached to the clock: get_clocks -of_objects [get_pins clknetwork/inst/mmcm_adv_inst/CLKOUT0]
+Related violations: <none>
+
+TIMING-28#2 Warning
+Auto-derived clock referenced by a timing constraint  
+The auto-derived clock clk_out1_clk_wiz_0 is referenced by name inside timing constraint (see constraint position 11 in the Timing Constraint window in Vivado IDE). It is recommended to reference an auto-derived clock by the pin name attached to the clock: get_clocks -of_objects [get_pins clknetwork/inst/mmcm_adv_inst/CLKOUT0]
+Related violations: <none>
+
+TIMING-28#3 Warning
+Auto-derived clock referenced by a timing constraint  
+The auto-derived clock clk_out1_clk_wiz_0 is referenced by name inside timing constraint (see constraint position 12 in the Timing Constraint window in Vivado IDE). It is recommended to reference an auto-derived clock by the pin name attached to the clock: get_clocks -of_objects [get_pins clknetwork/inst/mmcm_adv_inst/CLKOUT0]
+Related violations: <none>
+
+TIMING-28#4 Warning
+Auto-derived clock referenced by a timing constraint  
+The auto-derived clock clk_out1_clk_wiz_0 is referenced by name inside timing constraint (see constraint position 13 in the Timing Constraint window in Vivado IDE). It is recommended to reference an auto-derived clock by the pin name attached to the clock: get_clocks -of_objects [get_pins clknetwork/inst/mmcm_adv_inst/CLKOUT0]
+Related violations: <none>
+
+TIMING-28#5 Warning
+Auto-derived clock referenced by a timing constraint  
+The auto-derived clock clk_out1_clk_wiz_0 is referenced by name inside timing constraint (see constraint position 4 in the Timing Constraint window in Vivado IDE). It is recommended to reference an auto-derived clock by the pin name attached to the clock: get_clocks -of_objects [get_pins clknetwork/inst/mmcm_adv_inst/CLKOUT0]
+Related violations: <none>
+
+TIMING-28#6 Warning
+Auto-derived clock referenced by a timing constraint  
+The auto-derived clock clk_out1_clk_wiz_0 is referenced by name inside timing constraint (see constraint position 5 in the Timing Constraint window in Vivado IDE). It is recommended to reference an auto-derived clock by the pin name attached to the clock: get_clocks -of_objects [get_pins clknetwork/inst/mmcm_adv_inst/CLKOUT0]
+Related violations: <none>
+
+TIMING-28#7 Warning
+Auto-derived clock referenced by a timing constraint  
+The auto-derived clock clk_out1_clk_wiz_0 is referenced by name inside timing constraint (see constraint position 6 in the Timing Constraint window in Vivado IDE). It is recommended to reference an auto-derived clock by the pin name attached to the clock: get_clocks -of_objects [get_pins clknetwork/inst/mmcm_adv_inst/CLKOUT0]
+Related violations: <none>
+
+TIMING-28#8 Warning
+Auto-derived clock referenced by a timing constraint  
+The auto-derived clock clk_out1_clk_wiz_0 is referenced by name inside timing constraint (see constraint position 7 in the Timing Constraint window in Vivado IDE). It is recommended to reference an auto-derived clock by the pin name attached to the clock: get_clocks -of_objects [get_pins clknetwork/inst/mmcm_adv_inst/CLKOUT0]
+Related violations: <none>
+
+TIMING-28#9 Warning
+Auto-derived clock referenced by a timing constraint  
+The auto-derived clock clk_out1_clk_wiz_0 is referenced by name inside timing constraint (see constraint position 8 in the Timing Constraint window in Vivado IDE). It is recommended to reference an auto-derived clock by the pin name attached to the clock: get_clocks -of_objects [get_pins clknetwork/inst/mmcm_adv_inst/CLKOUT0]
+Related violations: <none>
+
+TIMING-28#10 Warning
+Auto-derived clock referenced by a timing constraint  
+The auto-derived clock clk_out1_clk_wiz_0 is referenced by name inside timing constraint (see constraint position 9 in the Timing Constraint window in Vivado IDE). It is recommended to reference an auto-derived clock by the pin name attached to the clock: get_clocks -of_objects [get_pins clknetwork/inst/mmcm_adv_inst/CLKOUT0]
+Related violations: <none>
+
+XDCC-1#1 Warning
+Scoped Clock constraint overwritten with the same name  
+A new clock constraint create_clock overrides a previous scoped clock constraint with the same name. It is not recommended to override a scoped (typically an IP) clock constraint and could result in unexpected behaviors.
+New: create_clock -period 10.000 -name clkin -waveform {0.000 5.000} [get_ports clkin] (Source: C:/share/my-systolic/syn/systolic_io_pins.xdc (Line: 43))
+Previous: create_clock -period 10.000 [get_ports clkin] (Source: c:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc (Line: 53))
+Related violations: <none>
+
+XDCC-7#1 Warning
+Scoped Clock constraint overwritten on the same source  
+A new clock constraint create_clock overrides a previous scoped clock constraint defined on the same source. It is not recommended to override a scoped (typically an IP) clock constraint and could result in unexpected behaviors.
+New: create_clock -period 10.000 -name clkin -waveform {0.000 5.000} [get_ports clkin] (Source: C:/share/my-systolic/syn/systolic_io_pins.xdc (Line: 43))
+Previous: create_clock -period 10.000 [get_ports clkin] (Source: c:/share/my-systolic/syn/sys_dummy_fpga4/sys_dummy_fpga4.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc (Line: 53))
+Related violations: <none>
+
+XDCH-2#1 Warning
+Same min and max delay values on IO port  
+The same input delay of 1.000 ns has been defined on port 'interrupt_0' relative to clock clk_out1_clk_wiz_0 for both max and min. Make sure this reflects the design intent.
+set_input_delay -clock [get_clocks clk_out1_clk_wiz_0] -max -add_delay 1.000 [get_ports interrupt_0]
+C:/share/my-systolic/syn/systolic_io_pins.xdc (Line: 51)
+Related violations: <none>
+
+XDCH-2#2 Warning
+Same min and max delay values on IO port  
+The same input delay of 1.000 ns has been defined on port 'rst_n' relative to clock clk_out1_clk_wiz_0 for both max and min. Make sure this reflects the design intent.
+set_input_delay -clock [get_clocks clk_out1_clk_wiz_0] -max -add_delay 1.000 [get_ports rst_n]
+C:/share/my-systolic/syn/systolic_io_pins.xdc (Line: 47)
+Related violations: <none>
+
+XDCH-2#3 Warning
+Same min and max delay values on IO port  
+The same input delay of 1.000 ns has been defined on port 'rx' relative to clock clk_out1_clk_wiz_0 for both max and min. Make sure this reflects the design intent.
+set_input_delay -clock [get_clocks clk_out1_clk_wiz_0] -max -add_delay 1.000 [get_ports rx]
+C:/share/my-systolic/syn/systolic_io_pins.xdc (Line: 49)
+Related violations: <none>
+
+XDCH-2#4 Warning
+Same min and max delay values on IO port  
+The same output delay of -3.000 ns has been defined on port 'rgb_led[0]' relative to clock clk_out1_clk_wiz_0 for both max and min. Make sure this reflects the design intent.
+set_output_delay -clock [get_clocks clk_out1_clk_wiz_0] -max -add_delay -3.000 [get_ports {rgb_led[*]}]
+C:/share/my-systolic/syn/systolic_io_pins.xdc (Line: 53)
+Related violations: <none>
+
+XDCH-2#5 Warning
+Same min and max delay values on IO port  
+The same output delay of -3.000 ns has been defined on port 'rgb_led[1]' relative to clock clk_out1_clk_wiz_0 for both max and min. Make sure this reflects the design intent.
+set_output_delay -clock [get_clocks clk_out1_clk_wiz_0] -max -add_delay -3.000 [get_ports {rgb_led[*]}]
+C:/share/my-systolic/syn/systolic_io_pins.xdc (Line: 53)
+Related violations: <none>
+
+XDCH-2#6 Warning
+Same min and max delay values on IO port  
+The same output delay of -3.000 ns has been defined on port 'rgb_led[2]' relative to clock clk_out1_clk_wiz_0 for both max and min. Make sure this reflects the design intent.
+set_output_delay -clock [get_clocks clk_out1_clk_wiz_0] -max -add_delay -3.000 [get_ports {rgb_led[*]}]
+C:/share/my-systolic/syn/systolic_io_pins.xdc (Line: 53)
+Related violations: <none>
+
+XDCH-2#7 Warning
+Same min and max delay values on IO port  
+The same output delay of -3.000 ns has been defined on port 'tx' relative to clock clk_out1_clk_wiz_0 for both max and min. Make sure this reflects the design intent.
+set_output_delay -clock [get_clocks clk_out1_clk_wiz_0] -max -add_delay -3.000 [get_ports tx]
+C:/share/my-systolic/syn/systolic_io_pins.xdc (Line: 55)
+Related violations: <none>
+
+

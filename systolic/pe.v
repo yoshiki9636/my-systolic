@@ -103,6 +103,8 @@ end
 reg aen_post;
 reg ben_post;
 
+//assign men_pre = aen_post & ben_post;
+//assign men = men_pre & ~ais & ~bis;
 assign men = aen_post & ben_post & ~ais & ~bis;
 assign sreset_pre = men & ~(|aoffset_cntr) ;
 
@@ -112,7 +114,6 @@ assign ben = brv & ~ais & ~bis;
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
         aen_int <= 1'b0;
-	//else if (~ais & ~bis & ben)
 	else if (~ais & ~bis)
         aen_int <= aen;
 end
@@ -120,7 +121,6 @@ end
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
         ben_int <= 1'b0;
-	//else if (~ais & ~bis & aen)
 	else if (~ais & ~bis)
         ben_int <= ben;
 end
@@ -128,7 +128,6 @@ end
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
         ben_post <= 1'b0;
-	//else if (~ais & ~bis & aen)
 	else if (~ais & ~bis)
         ben_post <= ben_int;
 end
@@ -136,7 +135,6 @@ end
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
         aen_post <= 1'b0;
-	//else if (~ais & ~bis & ben)
 	else if (~ais & ~bis)
         aen_post <= aen_int;
 end
@@ -147,6 +145,7 @@ always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
         men_post <= 1'b0;
 	else if (~ais & ~bis)
+        //men_post <= men_pre;
         men_post <= men;
 end
 
@@ -159,6 +158,7 @@ always @ (posedge clk or negedge rst_n) begin
         sen_post <= 1'b0;
 	else if (~ais & ~bis)
         sen_post <= sen;
+        //sen_post <= men_post;
 end
 
 assign fout = sen_post & ~ais & ~bis;

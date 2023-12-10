@@ -109,8 +109,8 @@ always @ (posedge clk or negedge rst_n) begin
         s_out <= $signed(16'd0);
 	end
 	else if (sreset) begin
-        sat <= sat_p;
-        s_out <= s_out_p;
+        sat <= sat_int;
+        s_out <= s_out_int;
 	end
 end
 
