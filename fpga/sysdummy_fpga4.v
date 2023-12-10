@@ -80,7 +80,7 @@ always @ (posedge clk or negedge rst_n) begin
 end
 
 systolic4 systolic4 (
-	.clkin(clkin),
+	.clk(clkin),
 	.rst_n(rst_n),
 	.ren(ren),
 	.ibus_radr(ibus_radr),
