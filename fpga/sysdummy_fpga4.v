@@ -15,7 +15,7 @@ module dummy_fpga_top(
 	input clkin,
 	input rst_n,
 	input rx,
-	output tx,
+	output reg tx,
 	input interrupt_0,
 	output [2:0] rgb_led
 	);
@@ -52,7 +52,14 @@ pll pll (
 // output
 wire [15:0] ibus_rdata; // output
 
-assign tx = ^ibus_rdata; 
+wire tx_pre = ^ibus_rdata; 
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n) begin
+		tx <= 1'b0;
+	else
+		tx <= tx_pre;
+end
 
 // input
 reg [15:0] ibus_radr; // input
