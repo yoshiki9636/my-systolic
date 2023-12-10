@@ -55,7 +55,7 @@ wire [15:0] ibus_rdata; // output
 wire tx_pre = ^ibus_rdata; 
 
 always @ (posedge clk or negedge rst_n) begin
-	if (~rst_n) begin
+	if (~rst_n)
 		tx <= 1'b0;
 	else
 		tx <= tx_pre;
