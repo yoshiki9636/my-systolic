@@ -1,6 +1,6 @@
 /*
  * My RISC-V RV32I CPU
- *   FPGA Top Module for Tang Premier
+ *   iobuf for systolic array
  *    Verilog code
  * @auther		Yoshiki Kurokawa <yoshiki.k963@gmail.com>
  * @copylight	2021 Yoshiki Kurokawa
@@ -30,18 +30,24 @@ module iobuf(
 	output [15:0] a_in1,
 	output [15:0] b_in1,
 	output reg [7:0] max_cntr,
-	output reg start,
-	output reg awe0,
-	output reg bwe0,
-	output reg awe1,
-	output reg bwe1,
-	// systolice array outbuffer interface
-	input [15:0] s_out0,
-	input [15:0] s_out1,
-	input sat0,
-	input sat1,
-	input sw0,
-	input sw1
+	output start,
+	output awe0,
+	output bwe0,
+	output awe1,
+	output bwe1,
+    // systolice array outbuffer interface
+    input [15:0] s_out0_0,
+    input [15:0] s_out1_0,
+    input [15:0] s_out0_1,
+    input [15:0] s_out1_1,
+    input sat0_0,
+    input sat1_0,
+    input sat0_1,
+    input sat1_1,
+    input sw0_0,
+    input sw1_0,
+    input sw0_1,
+    input sw1_1
 
 	);
 
@@ -49,27 +55,29 @@ module iobuf(
 `define IBUFA1_HEAD 6'h01
 `define IBUFB0_HEAD 6'h02
 `define IBUFB1_HEAD 6'h03
-`define OBUFS0_HEAD 6'h20
-`define OBUFS1_HEAD 6'h21
-`define OBUFSA0_HEAD 6'h22
-`define OBUFSA1_HEAD 6'h23
+`define OBUFS0_0_HEAD 7'h40
+`define OBUFS1_0_HEAD 7'h41
+`define OBUFS0_1_HEAD 7'h42
+`define OBUFS1_1_HEAD 7'h43
 `define SYS_START_ADR 16'hFFF0
 `define SYS_MAX_CNTR 16'hFFF1
 `define SYS_RUN_CNTR 16'hFFF2
 
 // 1shot start bit
 wire write_start = wen & (ibus_wadr == `SYS_START_ADR);
-
-//wire write_end = wen & (ibus_wadr == `SYS_END_ADR);
+reg run_status;
+wire finish1_1;
 
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
-        start <= 1'b0;
+        run_status <= 1'b0;
+	else if (finish1_1)
+        run_status <= 1'b0;
 	else if (write_start)
-        start <= 1'b1;
-	else
-        start <= 1'b0;
+        run_status <= 1'b1;
 end
+
+assign start = write_start & ~run_status;
 
 // running counter
 wire write_run_cntr = wen & (ibus_wadr == `SYS_RUN_CNTR);
@@ -81,41 +89,6 @@ always @ (posedge clk or negedge rst_n) begin
     else if (write_run_cntr)
         run_cntr <= ibus_wdata[7:0];
 end
-
-reg [7:0] run_s0_cntr;
-reg [7:0] run_s1_cntr;
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        run_s0_cntr <= 8'd0;
-    else if (start)
-        run_s0_cntr <= run_cntr;
-    else if ((run_s0_cntr > 8'd0) & sw0)
-        run_s0_cntr <= run_s0_cntr - 8'd1;
-end
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        run_s1_cntr <= 8'd0;
-    else if (start)
-        run_s1_cntr <= run_cntr;
-    else if ((run_s1_cntr > 8'd0) & sw1)
-        run_s1_cntr <= run_s1_cntr - 8'd1;
-end
-
-wire run_s0 = |run_s0_cntr;
-wire run_s1 = |run_s1_cntr;
-wire sys_running = run_s0 | run_s1;
-reg sys_running_d1;
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        sys_running_d1 <= 1'b0;
-	else
-        sys_running_d1 <= sys_running;
-end
-
-wire sys_end = ~sys_running & sys_running_d1;
 
 // max counter
 wire write_max_cntr = wen & (ibus_wadr == `SYS_MAX_CNTR);
@@ -129,12 +102,13 @@ end
 
 // input buffer controls
 // write part
-wire [9:0] ibuf_wadr = ibus_wadr[9:0];
+wire [9:0] abbus_wadr = ibus_wadr[9:0];
 wire ibuf_a0_wen = wen & (ibus_wadr[15:10] == `IBUFA0_HEAD);
 wire ibuf_a1_wen = wen & (ibus_wadr[15:10] == `IBUFA1_HEAD);
 wire ibuf_b0_wen = wen & (ibus_wadr[15:10] == `IBUFB0_HEAD);
 wire ibuf_b1_wen = wen & (ibus_wadr[15:10] == `IBUFB1_HEAD);
 
+wire [9:0] abbus_radr = ibus_wadr[9:0];
 wire ibuf_a0_dec = (ibus_radr[15:10] == `IBUFA0_HEAD);
 wire ibuf_a1_dec = (ibus_radr[15:10] == `IBUFA1_HEAD);
 wire ibuf_b0_dec = (ibus_radr[15:10] == `IBUFB0_HEAD);
@@ -145,289 +119,153 @@ wire ibuf_b0_ren = ren & ibuf_b0_dec;
 wire ibuf_b1_ren = ren & ibuf_b1_dec;
 
 // read part
-reg [9:0] ibuf_a0_radri;
-reg [9:0] ibuf_a1_radri;
-reg [9:0] ibuf_b0_radri;
-reg [9:0] ibuf_b1_radri;
-wire [9:0] ibuf_a0_radr;
-wire [9:0] ibuf_a1_radr;
-wire [9:0] ibuf_b0_radr;
-wire [9:0] ibuf_b1_radr;
+wire s_running0_0;
+wire s_running1_0;
+wire s_running0_1;
+wire s_running1_1;
 
-// a0 buffer's address
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        ibuf_a0_radri <= 10'd0;
-    else if (start)
-        ibuf_a0_radri <= 10'd0;
-	else if (sys_running & ~aff0)
-        ibuf_a0_radri <= ibuf_a0_radri + 10'd1;
-end
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        awe0 <= 1'b0;
-	else if (sys_running & ~aff0)
-        awe0 <= 1'b1;
-	else
-        awe0 <= 1'b0;
-end
-
-// a1 buffer's address
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        ibuf_a1_radri <= 10'd0;
-    else if (start)
-        ibuf_a1_radri <= 10'd0;
-	else if (sys_running & ~aff1)
-        ibuf_a1_radri <= ibuf_a1_radri + 10'd1;
-end
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        awe1 <= 1'b0;
-	else if (sys_running & ~aff1)
-        awe1 <= 1'b1;
-	else
-        awe1 <= 1'b0;
-end
-
-// b0 buffer's address
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        ibuf_b0_radri <= 10'd0;
-    else if (start)
-        ibuf_b0_radri <= 10'd0;
-	else if (sys_running & ~bff0)
-        ibuf_b0_radri <= ibuf_b0_radri + 10'd1;
-end
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        bwe0 <= 1'b0;
-	else if (sys_running & ~bff0)
-        bwe0 <= 1'b1;
-	else
-        bwe0 <= 1'b0;
-end
-
-// a1 buffer's address
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        ibuf_b1_radri <= 10'd0;
-    else if (start)
-        ibuf_b1_radri <= 10'd0;
-	else if (sys_running & ~bff1)
-        ibuf_b1_radri <= ibuf_b1_radri + 10'd1;
-end
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        bwe1 <= 1'b0;
-	else if (sys_running & ~bff1)
-        bwe1 <= 1'b1;
-	else
-        bwe1 <= 1'b0;
-end
-
-// address selector
-assign ibuf_a0_radr = ibuf_a0_ren ? ibus_radr[9:0] : ibuf_a0_radri;
-assign ibuf_a1_radr = ibuf_a1_ren ? ibus_radr[9:0] : ibuf_a1_radri;
-assign ibuf_b0_radr = ibuf_b0_ren ? ibus_radr[9:0] : ibuf_b0_radri;
-assign ibuf_b1_radr = ibuf_b1_ren ? ibus_radr[9:0] : ibuf_b1_radri;
-
-// input buffers
-
-buf_1r1w buf_a0 (
+abbuf a0buf (
 	.clk(clk),
-	.ram_radr(ibuf_a0_radr),
-	.ram_rdata(a_in0),
-	.ram_wadr(ibuf_wadr),
-	.ram_wdata(ibus_wdata),
-	.ram_wen(ibuf_a0_wen)
+	.rst_n(rst_n),
+	.ren(ibuf_a0_ren),
+	.abbus_radr(abbus_radr),
+	.wen(ibuf_a0_wen),
+	.ibus_wadr(abbus_wadr),
+	.ibus_wdata(ibus_wdata),
+	.start(start),
+	.sys_running(s_running0_0),
+	.ff(aff0),
+	.ab_in(a_in0),
+	.we(awe0)
 	);
 
-buf_1r1w buf_a1 (
+abbuf a1buf (
 	.clk(clk),
-	.ram_radr(ibuf_a1_radr),
-	.ram_rdata(a_in1),
-	.ram_wadr(ibuf_wadr),
-	.ram_wdata(ibus_wdata),
-	.ram_wen(ibuf_a1_wen)
+	.rst_n(rst_n),
+	.ren(ibuf_a1_ren),
+	.abbus_radr(abbus_radr),
+	.wen(ibuf_a1_wen),
+	.ibus_wadr(abbus_wadr),
+	.ibus_wdata(ibus_wdata),
+	.start(start),
+	.sys_running(s_running1_0),
+	.ff(aff1),
+	.ab_in(a_in1),
+	.we(awe1)
 	);
 
-buf_1r1w buf_b0 (
+abbuf b0buf (
 	.clk(clk),
-	.ram_radr(ibuf_b0_radr),
-	.ram_rdata(b_in0),
-	.ram_wadr(ibuf_wadr),
-	.ram_wdata(ibus_wdata),
-	.ram_wen(ibuf_b0_wen)
+	.rst_n(rst_n),
+	.ren(ibuf_b0_ren),
+	.abbus_radr(abbus_radr),
+	.wen(ibuf_b0_wen),
+	.ibus_wadr(abbus_wadr),
+	.ibus_wdata(ibus_wdata),
+	.start(start),
+	.sys_running(s_running0_0),
+	.ff(bff0),
+	.ab_in(b_in0),
+	.we(bwe0)
 	);
 
-buf_1r1w buf_b1 (
+abbuf b1buf (
 	.clk(clk),
-	.ram_radr(ibuf_b1_radr),
-	.ram_rdata(b_in1),
-	.ram_wadr(ibuf_wadr),
-	.ram_wdata(ibus_wdata),
-	.ram_wen(ibuf_b1_wen)
+	.rst_n(rst_n),
+	.ren(ibuf_b1_ren),
+	.abbus_radr(abbus_radr),
+	.wen(ibuf_b1_wen),
+	.ibus_wadr(abbus_wadr),
+	.ibus_wdata(ibus_wdata),
+	.start(start),
+	.sys_running(s_running0_1),
+	.ff(bff1),
+	.ab_in(b_in1),
+	.we(bwe1)
 	);
 
 
 // outbuffer controls
 // read part
-wire [9:0] obuf_radr = ibus_radr[9:0];
-wire obuf_s0_dec = (ibus_radr[15:10] == `OBUFS0_HEAD);
-wire obuf_s1_dec = (ibus_radr[15:10] == `OBUFS1_HEAD);
-wire obuf_sa0_dec = (ibus_radr[15:10] == `OBUFSA0_HEAD);
-wire obuf_sa1_dec = (ibus_radr[15:10] == `OBUFSA1_HEAD);
-wire [15:0] obuf_s0_rdata;
-wire [15:0] obuf_s1_rdata;
-wire [15:0] obuf_sa0_rdata;
-wire [15:0] obuf_sa1_rdata;
+wire [8:0] sbus_radr = ibus_radr[8:0];
+
+wire sbuf_s0_0_dec = (ibus_radr[15:9] == `OBUFS0_0_HEAD);
+wire sbuf_s1_0_dec = (ibus_radr[15:9] == `OBUFS1_0_HEAD);
+wire sbuf_s0_1_dec = (ibus_radr[15:9] == `OBUFS0_1_HEAD);
+wire sbuf_s1_1_dec = (ibus_radr[15:9] == `OBUFS1_1_HEAD);
+wire [15:0] sbus_rdata0_0;
+wire [15:0] sbus_rdata1_0;
+wire [15:0] sbus_rdata0_1;
+wire [15:0] sbus_rdata1_1;
 
 // read bus selector
-assign ibus_rdata = obuf_s0_dec ? obuf_s0_rdata :
-					obuf_s1_dec ? obuf_s1_rdata :
-					obuf_sa0_dec ? obuf_sa0_rdata :
-					obuf_sa1_dec ? obuf_sa1_rdata :
+assign ibus_rdata = sbuf_s0_0_dec ? sbus_rdata0_0 :
+					sbuf_s1_0_dec ? sbus_rdata1_0 :
+					sbuf_s0_1_dec ? sbus_rdata0_1 :
+					sbuf_s1_1_dec ? sbus_rdata1_1 :
 					ibuf_a0_dec ? a_in0 :
 					ibuf_a1_dec ? a_in1 :
 					ibuf_b0_dec ? b_in0 :
 					ibuf_b1_dec ? b_in1 : 16'd0;
 
-// write part
-reg [9:0] obuf_s0_wadr;
-reg [9:0] obuf_s1_wadr;
-// s0 buffer's address
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        obuf_s0_wadr <= 10'd0;
-    else if (start)
-        obuf_s0_wadr <= 10'd0;
-	else if (sys_running & sw0)
-        obuf_s0_wadr <= obuf_s0_wadr + 10'd1;
-end
+wire finish0_0;
+wire finish1_0;
+wire finish0_1;
 
-// s1 buffer's address
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        obuf_s1_wadr <= 10'd0;
-    else if (start)
-        obuf_s1_wadr <= 10'd0;
-	else if (sys_running & sw1)
-        obuf_s1_wadr <= obuf_s1_wadr + 10'd1;
-end
-
-// satuation bits buffer
-reg [3:0] sat0_cntr;
-reg [3:0] sat1_cntr;
-reg [15:0] sat0_agg;
-reg [15:0] sat1_agg;
-reg [9:0] obuf_sa0_wadr;
-reg [9:0] obuf_sa1_wadr;
-
-// satuation bit counter
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        sat0_cntr <= 4'd0;
-    else if (start)
-        sat0_cntr <= 4'd0;
-	else if (sys_running & sw0)
-        sat0_cntr <= sat0_cntr + 4'd1;
-end
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        sat1_cntr <= 4'd0;
-    else if (start)
-        sat1_cntr <= 4'd0;
-	else if (sys_running & sw1)
-        sat1_cntr <= sat1_cntr + 4'd1;
-end
-
-wire sat0_wen = ((sat0_cntr == 4'hf) & sat0) | sys_end;
-wire sat1_wen = ((sat1_cntr == 4'hf) & sat1) | sys_end;
-
-// bit aggrigator
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        sat0_agg <= 16'd0;
-    else if (start)
-        sat0_agg <= 16'd0;
-	else if (sys_running & sw0 & (sat0_cntr == 4'hf))
-        sat0_agg <= { 15'd0, sat0 };
-	else if (sys_running & sw0)
-        sat0_agg <= { sat0_agg[15:0], sat0 };
-end
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        sat1_agg <= 16'd0;
-    else if (start)
-        sat1_agg <= 16'd0;
-	else if (sys_running & sw1 & (sat1_cntr == 4'hf))
-        sat1_agg <= { 15'd0, sat1 };
-	else if (sys_running & sw1)
-        sat1_agg <= { sat1_agg[15:0], sat1 };
-end
-
-// address counter
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        obuf_sa0_wadr <= 10'd0;
-    else if (start)
-        obuf_sa0_wadr <= 10'd0;
-	else if (sys_running & sat0_wen)
-        obuf_sa0_wadr <= obuf_sa0_wadr + 10'd1;
-end
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        obuf_sa1_wadr <= 10'd0;
-    else if (start)
-        obuf_sa1_wadr <= 10'd0;
-	else if (sys_running & sat1_wen)
-        obuf_sa1_wadr <= obuf_sa1_wadr + 10'd1;
-end
-
-// output buffers
-buf_1r1w buf_s0 (
+sbuf sbuf0_0 (
 	.clk(clk),
-	.ram_radr(obuf_radr),
-	.ram_rdata(obuf_s0_rdata),
-	.ram_wadr(obuf_s0_wadr),
-	.ram_wdata(s_out0),
-	.ram_wen(sw0)
+	.rst_n(rst_n),
+	.sbus_radr(sbus_radr),
+	.sbus_rdata(sbus_rdata0_0),
+	.run_cntr(run_cntr),
+	.start(start),
+	.s_running(s_running0_0),
+	.finish(finish0_0),
+	.s_out(s_out0_0),
+	.sat(sat0_0),
+	.sw(sw0_0)
 	);
 
-buf_1r1w buf_s1 (
+sbuf sbuf1_0 (
 	.clk(clk),
-	.ram_radr(obuf_radr),
-	.ram_rdata(obuf_s1_rdata),
-	.ram_wadr(obuf_s1_wadr),
-	.ram_wdata(s_out1),
-	.ram_wen(sw1)
+	.rst_n(rst_n),
+	.sbus_radr(sbus_radr),
+	.sbus_rdata(sbus_rdata1_0),
+	.run_cntr(run_cntr),
+	.start(start),
+	.s_running(s_running1_0),
+	.finish(finish1_0),
+	.s_out(s_out1_0),
+	.sat(sat1_0),
+	.sw(sw1_0)
 	);
 
-buf_1r1w buf_sa0 (
+sbuf sbuf0_1 (
 	.clk(clk),
-	.ram_radr(obuf_radr),
-	.ram_rdata(obuf_sa0_rdata),
-	.ram_wadr(obuf_sa0_wadr),
-	.ram_wdata(sat0_agg),
-	.ram_wen(sat0_wen)
+	.rst_n(rst_n),
+	.sbus_radr(sbus_radr),
+	.sbus_rdata(sbus_rdata0_1),
+	.run_cntr(run_cntr),
+	.start(start),
+	.s_running(s_running0_1),
+	.finish(finish0_1),
+	.s_out(s_out0_1),
+	.sat(sat0_1),
+	.sw(sw0_1)
 	);
 
-buf_1r1w buf_sa1 (
+sbuf sbuf1_1 (
 	.clk(clk),
-	.ram_radr(obuf_radr),
-	.ram_rdata(obuf_sa1_rdata),
-	.ram_wadr(obuf_sa1_wadr),
-	.ram_wdata(sat1_agg),
-	.ram_wen(sat1_wen)
+	.rst_n(rst_n),
+	.sbus_radr(sbus_radr),
+	.sbus_rdata(sbus_rdata1_1),
+	.run_cntr(run_cntr),
+	.s_running(s_running1_1),
+	.start(start),
+	.finish(finish1_1),
+	.s_out(s_out1_1),
+	.sat(sat1_1),
+	.sw(sw1_1)
 	);
-
 
 endmodule

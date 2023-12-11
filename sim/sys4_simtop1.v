@@ -35,10 +35,10 @@ initial clkin = 0;
 
 always #5 clkin <= ~clkin;
 
-initial $readmemh("./testa0.txt", systolic4.iobuf.buf_a0.ram);
-initial $readmemh("./testa1.txt", systolic4.iobuf.buf_a1.ram);
-initial $readmemh("./testb0.txt", systolic4.iobuf.buf_b0.ram);
-initial $readmemh("./testb1.txt", systolic4.iobuf.buf_b1.ram);
+initial $readmemh("./testa0.txt", systolic4.iobuf.a0buf.buf_ab.ram);
+initial $readmemh("./testa1.txt", systolic4.iobuf.a1buf.buf_ab.ram);
+initial $readmemh("./testb0.txt", systolic4.iobuf.b0buf.buf_ab.ram);
+initial $readmemh("./testb1.txt", systolic4.iobuf.b1buf.buf_ab.ram);
 
 `define SYS_START_ADR 16'hFFF0
 `define SYS_MAX_CNTR 16'hFFF1
@@ -61,7 +61,7 @@ initial begin
 	wen = 1'b1;
 #10
 	ibus_wadr = `SYS_RUN_CNTR;
-	ibus_wdata = 16'd4;
+	ibus_wdata = 16'd3;
 #10
 	wen = 1'b0;
 #10

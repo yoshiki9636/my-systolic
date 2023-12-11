@@ -72,21 +72,6 @@ wire se1_0; // output
 wire se0_1; // output
 wire se1_1; // output
 
-// sun & saturation selector
-
-wire [15:0] s_out0 = se0_0 ? s_out0_0 :
-                     se1_0 ? s_out1_0 : 16'd0;
-wire [15:0] s_out1 = se0_1 ? s_out0_1 :
-                     se1_1 ? s_out1_1 : 16'd0;
-
-wire sat0 = se0_0 ? sat0_0 :
-            se1_0 ? sat1_0 : 1'b0;
-wire sat1 = se0_1 ? sat0_1 :
-            se1_1 ? sat1_1 : 1'b0;
-wire sw0 = se0_0 | se1_0;
-wire sw1 = se0_1 | se1_1;
-
-
 // io buffers and controller
 iobuf iobuf (
 	.clk(clk),
@@ -111,12 +96,18 @@ iobuf iobuf (
 	.bwe0(bwe0),
 	.awe1(awe1),
 	.bwe1(bwe1),
-	.s_out0(s_out0),
-	.s_out1(s_out1),
-	.sat0(sat0),
-	.sat1(sat1),
-	.sw0(sw0),
-	.sw1(sw1)
+	.s_out0_0(s_out0_0),
+	.s_out1_0(s_out1_0),
+	.s_out0_1(s_out0_1),
+	.s_out1_1(s_out1_1),
+	.sat0_0(sat0_0),
+	.sat1_0(sat1_0),
+	.sat0_1(sat0_1),
+	.sat1_1(sat1_1),
+	.sw0_0(se0_0),
+	.sw1_0(se1_0),
+	.sw0_1(se0_1),
+	.sw1_1(se1_1)
 	);
 
 // processor elements
