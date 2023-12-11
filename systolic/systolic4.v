@@ -1,15 +1,12 @@
 /*
  * My RISC-V RV32I CPU
- *   FPGA Top Module for Tang Premier
+ *   Systolic Top Module for 4 PE version
  *    Verilog code
  * @auther		Yoshiki Kurokawa <yoshiki.k963@gmail.com>
  * @copylight	2021 Yoshiki Kurokawa
  * @license		https://opensource.org/licenses/MIT     MIT license
  * @version		0.1
  */
-
-//`define TANG_PRIMER
-`define ARTY_A7
 
 module systolic4(
 	input clk,
