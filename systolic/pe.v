@@ -21,7 +21,8 @@ module pe(
 	output aff,
 	output bff,
 	output se,
-	output fout,
+	output afout,
+	output bfout,
 	output sat,
 	output signed [15:0] s_out,
 	output reg signed [15:0] a_out,
@@ -103,8 +104,8 @@ end
 reg aen_post;
 reg ben_post;
 
-//assign men_pre = aen_post & ben_post;
-//assign men = men_pre & ~ais & ~bis;
+assign afout = aen_post & ~ais & ~bis;
+assign bfout = ben_post & ~ais & ~bis;
 assign men = aen_post & ben_post & ~ais & ~bis;
 assign sreset_pre = men & ~(|aoffset_cntr) ;
 
@@ -145,7 +146,6 @@ always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
         men_post <= 1'b0;
 	else if (~ais & ~bis)
-        //men_post <= men_pre;
         men_post <= men;
 end
 
@@ -158,11 +158,7 @@ always @ (posedge clk or negedge rst_n) begin
         sen_post <= 1'b0;
 	else if (~ais & ~bis)
         sen_post <= sen;
-        //sen_post <= men_post;
 end
-
-assign fout = sen_post & ~ais & ~bis;
-
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -191,51 +187,19 @@ always @ (posedge clk or negedge rst_n) begin
 end
 
 // pipeline FF for bypassing A,B data
-reg signed [15:0] a_aen;
-reg signed [15:0] b_ben;
-reg signed [15:0] a_men;
-reg signed [15:0] b_men;
-
-always @ (posedge clk or negedge rst_n) begin
-	if (~rst_n)
-        a_aen <= $signed(16'd0);
-	else if (aen)
-        a_aen <= a_value;
-end
-
-always @ (posedge clk or negedge rst_n) begin
-	if (~rst_n)
-        a_men <= $signed(16'd0);
-	else if (men)
-        a_men <= a_aen;
-end
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
         a_out <= $signed(16'd0);
-	else if (sen)
-        a_out <= a_men;
-end
-
-always @ (posedge clk or negedge rst_n) begin
-	if (~rst_n)
-        b_ben <= $signed(16'd0);
-	else if (ben)
-        b_ben <= b_value;
-end
-
-always @ (posedge clk or negedge rst_n) begin
-	if (~rst_n)
-        b_men <= $signed(16'd0);
-	else if (men)
-        b_men <= b_ben;
+	else if (aen)
+        a_out <= a_value;
 end
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
         b_out <= $signed(16'd0);
-	else if (sen)
-        b_out <= b_men;
+	else if (ben)
+        b_out <= b_value;
 end
 
 endmodule
