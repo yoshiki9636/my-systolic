@@ -58,8 +58,18 @@ assign finish = ~s_running & s_running_d1;
 wire [15:0] sbuf_s_rdata;
 wire [15:0] sbuf_sa_rdata;
 
+reg sbus_rsel;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n)
+        sbus_rsel <= 1'b0;
+	else
+        sbus_rsel <=  sbus_radr[8];
+end
+
+
 wire [7:0] obus_radr = sbus_radr[7:0];
-assign sbus_rdata = sbus_radr[8] ? sbuf_sa_rdata : sbuf_s_rdata;
+assign sbus_rdata = sbus_rsel ? sbuf_sa_rdata : sbuf_s_rdata;
 
 // write part
 
