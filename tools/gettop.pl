@@ -46,16 +46,16 @@ wire [7:0] max_cntr; // output
 wire start; // output
 ";
 for ($j = 0; $j < $n; $j++) {
-	print "wire awe$i; // output\n";
-	print "wire bwe$i; // output\n";
+	print "wire awe$j; // output\n";
+	print "wire bwe$j; // output\n";
 }
 for ($j = 0; $j < $n; $j++) {
 	for ($i = 0; $i < $n; $i++) {
 		print "wire fout${i}_${j}; // output\n";
 		print "wire start_next${i}_${j}; // output\n";
-		print "wire [15:0] aout${i}_${j}; // output\n";
-		print "wire [15:0] bout${i}_${j}; // output\n";
-		print "wire [15:0] sout${i}_${j}; // output\n";
+		print "wire [15:0] a_out${i}_${j}; // output\n";
+		print "wire [15:0] b_out${i}_${j}; // output\n";
+		print "wire [15:0] s_out${i}_${j}; // output\n";
 		print "wire sat${i}_${j}; // output\n";
 		print "wire se${i}_${j}; // output\n";
 	}
@@ -100,9 +100,9 @@ for ($j = 0; $j < $n; $j++) {
 		print  "	.s_out${i}_${j}(s_out${i}_${j}),\n";
 		print  "	.sat${i}_${j}(sat${i}_${j}),\n";
 		if (($i == $n-1)&($j == $n-1)) {
-			print  "	.sw${i}_${j}(sw${i}_${j})\n";
+			print  "	.sw${i}_${j}(se${i}_${j})\n";
 		} else {
-			print  "	.sw${i}_${j}(sw${i}_${j}),\n";
+			print  "	.sw${i}_${j}(se${i}_${j}),\n";
 		}
 	}
 }
