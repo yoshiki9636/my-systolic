@@ -1,11 +1,11 @@
 /*
  * My RISC-V RV32I CPU
- *   iobuf Module for 4 PE version
+ *   iobuf for systolic array
  *    Verilog code
- * 		Yoshiki Kurokawa <yoshiki.k963.com>
- * 	2021 Yoshiki Kurokawa
- * 		https://opensource.org/licenses/MIT     MIT license
- * 		0.1
+ * @auther		Yoshiki Kurokawa <yoshiki.k963@gmail.com>
+ * @copylight	2021 Yoshiki Kurokawa
+ * @license		https://opensource.org/licenses/MIT     MIT license
+ * @version		0.1
  */
 
 module iobuf(
@@ -35,7 +35,7 @@ module iobuf(
 	output bwe0,
 	output awe1,
 	output bwe1,
-	// systolice array outbuffer interface
+    // systolice array outbuffer interface
 	input [15:0] s_out0_0,
 	input [15:0] s_out1_0,
 	input [15:0] s_out0_1,
@@ -48,7 +48,9 @@ module iobuf(
 	input sw1_0,
 	input sw0_1,
 	input sw1_1
+
 	);
+
 `define IBUFA0_HEAD 6'h00
 `define IBUFA1_HEAD 6'h01
 `define IBUFB0_HEAD 6'h02
@@ -191,6 +193,7 @@ abbuf b1buf (
 	.we(bwe1)
 	);
 
+
 // outbuffer controls
 // read part
 wire [8:0] sbus_radr = ibus_radr[8:0];
@@ -213,6 +216,7 @@ assign ibus_rdata = sbuf_s0_0_dec ? sbus_rdata0_0 :
 					ibuf_a1_dec ? a_in1 :
 					ibuf_b0_dec ? b_in0 :
 					ibuf_b1_dec ? b_in1 : 16'd0;
+
 wire finish0_0;
 wire finish1_0;
 wire finish0_1;
