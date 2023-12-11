@@ -43,14 +43,10 @@ wire awe0; // output
 wire bwe0; // output
 wire awe1; // output
 wire bwe1; // output
-wire afout0_0; // output
-wire bfout0_0; // output
-wire afout1_0; // output
-wire bfout1_0; // output
-wire afout0_1; // output
-wire bfout0_1; // output
-wire afout1_1; // output
-wire bfout1_1; // output
+wire fout0_0; // output
+wire fout1_0; // output
+wire fout0_1; // output
+wire fout1_1; // output
 wire start_next0_0; // output
 wire start_next1_0; // output
 wire start_next0_1; // output
@@ -130,8 +126,7 @@ pe pe0_0 (
 	.aff(aff0_0),
 	.bff(bff0_0),
 	.se(se0_0),
-	.afout(afout0_0),
-	.bfout(bfout0_0),
+	.fout(fout0_0),
 	.sat(sat0_0),
 	.s_out(s_out0_0),
 	.a_out(a_out0_0),
@@ -148,7 +143,7 @@ pe pe1_0 (
 	.a_in(a_out0_0),
 	.b_in(b_in1),
 	.start(start),
-	.awe(afout0_0),
+	.awe(fout0_0),
 	.bwe(bwe1),
 	.ais(1'b0),
 	.bis(bff1_1),
@@ -156,8 +151,7 @@ pe pe1_0 (
 	.aff(aff1_0),
 	.bff(bff1_0),
 	.se(se1_0),
-	.afout(afout1_0),
-	.bfout(bfout1_0),
+	.fout(fout1_0),
 	.sat(sat1_0),
 	.s_out(s_out1_0),
 	.a_out(a_out1_0),
@@ -175,14 +169,13 @@ pe pe0_1 (
 	.b_in(b_out0_0),
 	.start(start),
 	.awe(awe1),
-	.bwe(bfout0_0),
+	.bwe(fout0_0),
 	.ais(bff1_1),
 	.bis(1'b0),
 	.aff(aff0_1),
 	.bff(bff0_1),
 	.se(se0_1),
-	.afout(afout0_1),
-	.bfout(bfout0_1),
+	.fout(fout0_1),
 	.sat(sat0_1),
 	.s_out(s_out0_1),
 	.a_out(a_out0_1),
@@ -199,16 +192,15 @@ pe pe1_1 (
 	.a_in(a_out0_1),
 	.b_in(b_out1_0),
 	.start(start),
-	.awe(afout0_1),
-	.bwe(bfout1_0),
+	.awe(fout0_1),
+	.bwe(fout1_0),
 	.ais(1'b0),
 	.bis(1'b0),
 
 	.aff(aff1_1),
 	.bff(bff1_1),
 	.se(se1_1),
-	.afout(afout1_1),
-	.bfout(bfout1_1),
+	.fout(fout1_1),
 	.sat(sat1_1),
 	.s_out(s_out1_1),
 	.a_out(a_out1_1),

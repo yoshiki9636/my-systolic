@@ -21,8 +21,7 @@ module pe(
 	output aff,
 	output bff,
 	output se,
-	output afout,
-	output bfout,
+	output fout,
 	output sat,
 	output signed [15:0] s_out,
 	output reg signed [15:0] a_out,
@@ -104,9 +103,8 @@ end
 reg aen_post;
 reg ben_post;
 
-assign afout = aen_post & ~ais & ~bis;
-assign bfout = ben_post & ~ais & ~bis;
 assign men = aen_post & ben_post & ~ais & ~bis;
+assign fout = men;
 assign sreset_pre = men & ~(|aoffset_cntr) ;
 
 assign aen = arv & ~ais & ~bis;
