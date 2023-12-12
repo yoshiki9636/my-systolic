@@ -106,6 +106,15 @@ end
 
 assign start = write_start & ~run_status;
 
+reg status_read_en;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		status_read_en <= 1'b0;
+	else
+		status_read_en <= ren & (ibus_radr == `SYS_START_ADR);
+end
+
 // running counter
 wire write_run_cntr = wen & (ibus_wadr == `SYS_RUN_CNTR);
 reg [7:0] run_cntr;
@@ -141,23 +150,14 @@ for ($j = 0; $j < $n; $j++) {
 }
 
 print "
-reg [6:0] ibus_decaddr;
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        ibus_decaddr <= 8'd0;
-    else if (write_max_cntr)
-        ibus_decaddr <= ibus_radr[15:9];
-end
-
-wire [9:0] abbus_radr = ibus_wadr[9:0];
+wire [9:0] abbus_radr = ibus_radr[9:0];
 ";
 
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_a${j}_dec = (ibus_decaddr[6:1] == `IBUFA${j}_HEAD);\n";
+	print "wire ibuf_a${j}_dec = (ibus_radr[15:10] == `IBUFA${j}_HEAD);\n";
 }
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_b${j}_dec = (ibus_decaddr[6:1] == `IBUFB${j}_HEAD);\n";
+	print "wire ibuf_b${j}_dec = (ibus_radr[15:10] == `IBUFB${j}_HEAD);\n";
 }
 for ($j = 0; $j < $n; $j++) {
 	print "wire ibuf_a${j}_ren = ren & ibuf_a${j}_dec;\n";
@@ -221,37 +221,97 @@ wire [8:0] sbus_radr = ibus_radr[8:0];
 
 for ($j = 0; $j < $n; $j++) {
 	for ($i = 0; $i < $n; $i++) {
-		print "wire sbuf_s${i}_${j}_dec = (ibus_decaddr == `OBUFS${i}_${j}_HEAD);\n";
+		print "wire sbuf_s${i}_${j}_dec = (ibus_radr[15:9] == `OBUFS${i}_${j}_HEAD);\n";
 	}
 }
+
+for ($j = 0; $j < $n; $j++) {
+	for ($i = 0; $i < $n; $i++) {
+		print "reg sbuf_s${i}_${j}_dec_l1;\n";
+		print "reg sbuf_s${i}_${j}_dec_l2;\n";
+		print "
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n) begin
+		 sbuf_s${i}_${j}_dec_l1 <= 1'b0;
+		 sbuf_s${i}_${j}_dec_l2 <= 1'b0;
+	end
+	else begin
+		 sbuf_s${i}_${j}_dec_l1 <= sbuf_s${i}_${j}_dec;
+		 sbuf_s${i}_${j}_dec_l2 <= sbuf_s${i}_${j}_dec_l1;
+	end
+end
+
+";
+	}
+}
+
 for ($j = 0; $j < $n; $j++) {
 	for ($i = 0; $i < $n; $i++) {
 		print "wire [15:0] sbus_rdata${i}_${j};\n";
 	}
 }
 
+for ($j = 0; $j < $n; $j++) {
+	for ($i = 0; $i < $n; $i++) {
+		print "reg [15:0] sbus_rdata${i}_${j}_lat;\n";
+	}
+}
+for ($j = 0; $j < $n; $j++) {
+	for ($i = 0; $i < $n; $i++) {
+		print "
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		sbus_rdata${i}_${j}_lat <= 16'd0;
+	else
+		sbus_rdata${i}_${j}_lat <= sbus_rdata${i}_${j};
+end
+";
+	}
+}
+for ($j = 0; $j < $n; $j++) {
+	print "reg a_in${j}_lat;\n";
+	print "
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		a_in${j}_lat <= 16'd0;
+	else
+		a_in${j}_lat <= a_in${j};
+end
+";
+}
+
+for ($j = 0; $j < $n; $j++) {
+	print "reg b_in${j}_lat;\n";
+	print "
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		b_in${j}_lat <= 16'd0;
+	else
+		b_in${j}_lat <= b_in${j};
+end
+";
+}
+
+
 print "\n// read bus selector\n";
 
 for ($j = 0; $j < $n; $j++) {
 	for ($i = 0; $i < $n; $i++) {
 		if (($j == 0)&($i == 0)) {
-			print "assign ibus_rdata = sbuf_s0_0_dec ? sbus_rdata0_0 :\n";
+			print "assign ibus_rdata = sbuf_s0_0_dec_l2 ? sbus_rdata0_0_lat :\n";
 		} else {
-			print"					sbuf_s${i}_${j}_dec ? sbus_rdata${i}_${j} :\n";
+			print"					sbuf_s${i}_${j}_dec_l2 ? sbus_rdata${i}_${j}_lat :\n";
 		}
 	}
 }
 for ($j = 0; $j < $n; $j++) {
-	print"					ibuf_a${j}_dec ? a_in${j} :\n";
+	print"					ibuf_a${j}_dec ? a_in${j}_lat :\n";
 }
 for ($j = 0; $j < $n; $j++) {
-	if ($j == $n-1) {
-		print "					ibuf_b${j}_dec ? b_in${j} : 16'd0;\n";
-	} else {
-		print"					ibuf_b${j}_dec ? b_in${j} :\n";
-	}
+	print"					ibuf_b${j}_dec ? b_in${j}_lat :\n";
 }
 
+print "					status_read_en ? { 15'd0, run_status} : 16'd0;\n";
 
 
 for ($j = 0; $j < $n; $j++) {
