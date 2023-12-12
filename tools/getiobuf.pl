@@ -165,6 +165,40 @@ for ($j = 0; $j < $n; $j++) {
 for ($j = 0; $j < $n; $j++) {
 	print "wire ibuf_b${j}_ren = ren & ibuf_b${j}_dec;\n";
 }
+for ($j = 0; $j < $n; $j++) {
+	print "
+reg ibuf_a${j}_ren_l1;
+reg ibuf_a${j}_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_a${j}_ren_l1 <= 1'b0;
+         ibuf_a${j}_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_a${j}_ren_l1 <= ibuf_a${j}_ren;
+         ibuf_a${j}_ren_l2 <= ibuf_a${j}_ren_l1;
+    end
+end
+";
+}
+for ($j = 0; $j < $n; $j++) {
+	print "
+reg ibuf_b${j}_ren_l1;
+reg ibuf_b${j}_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_b${j}_ren_l1 <= 1'b0;
+         ibuf_b${j}_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_b${j}_ren_l1 <= ibuf_b${j}_ren;
+         ibuf_b${j}_ren_l2 <= ibuf_b${j}_ren_l1;
+    end
+end
+";
+}
 
 for ($j = 0; $j < $n; $j++) {
 	for ($i = 0; $i < $n; $i++) {
@@ -269,7 +303,7 @@ end
 	}
 }
 for ($j = 0; $j < $n; $j++) {
-	print "reg a_in${j}_lat;\n";
+	print "reg [15:0] a_in${j}_lat;\n";
 	print "
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -281,7 +315,7 @@ end
 }
 
 for ($j = 0; $j < $n; $j++) {
-	print "reg b_in${j}_lat;\n";
+	print "reg [15:0] b_in${j}_lat;\n";
 	print "
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -305,10 +339,10 @@ for ($j = 0; $j < $n; $j++) {
 	}
 }
 for ($j = 0; $j < $n; $j++) {
-	print"					ibuf_a${j}_dec ? a_in${j}_lat :\n";
+	print"					ibuf_a${j}_ren_l2 ? a_in${j}_lat :\n";
 }
 for ($j = 0; $j < $n; $j++) {
-	print"					ibuf_b${j}_dec ? b_in${j}_lat :\n";
+	print"					ibuf_b${j}_ren_l2 ? b_in${j}_lat :\n";
 }
 
 print "					status_read_en ? { 15'd0, run_status} : 16'd0;\n";

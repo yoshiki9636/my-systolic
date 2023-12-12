@@ -124,6 +124,62 @@ wire ibuf_a0_ren = ren & ibuf_a0_dec;
 wire ibuf_a1_ren = ren & ibuf_a1_dec;
 wire ibuf_b0_ren = ren & ibuf_b0_dec;
 wire ibuf_b1_ren = ren & ibuf_b1_dec;
+
+reg ibuf_a0_ren_l1;
+reg ibuf_a0_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_a0_ren_l1 <= 1'b0;
+         ibuf_a0_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_a0_ren_l1 <= ibuf_a0_ren;
+         ibuf_a0_ren_l2 <= ibuf_a0_ren_l1;
+    end
+end
+
+reg ibuf_a1_ren_l1;
+reg ibuf_a1_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_a1_ren_l1 <= 1'b0;
+         ibuf_a1_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_a1_ren_l1 <= ibuf_a1_ren;
+         ibuf_a1_ren_l2 <= ibuf_a1_ren_l1;
+    end
+end
+
+reg ibuf_b0_ren_l1;
+reg ibuf_b0_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_b0_ren_l1 <= 1'b0;
+         ibuf_b0_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_b0_ren_l1 <= ibuf_b0_ren;
+         ibuf_b0_ren_l2 <= ibuf_b0_ren_l1;
+    end
+end
+
+reg ibuf_b1_ren_l1;
+reg ibuf_b1_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_b1_ren_l1 <= 1'b0;
+         ibuf_b1_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_b1_ren_l1 <= ibuf_b1_ren;
+         ibuf_b1_ren_l2 <= ibuf_b1_ren_l1;
+    end
+end
 wire s_running0_0;
 wire s_running1_0;
 wire s_running0_1;
@@ -291,7 +347,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		sbus_rdata1_1_lat <= sbus_rdata1_1;
 end
-reg a_in0_lat;
+reg [15:0] a_in0_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -299,7 +355,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		a_in0_lat <= a_in0;
 end
-reg a_in1_lat;
+reg [15:0] a_in1_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -307,7 +363,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		a_in1_lat <= a_in1;
 end
-reg b_in0_lat;
+reg [15:0] b_in0_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -315,7 +371,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		b_in0_lat <= b_in0;
 end
-reg b_in1_lat;
+reg [15:0] b_in1_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -329,10 +385,10 @@ assign ibus_rdata = sbuf_s0_0_dec_l2 ? sbus_rdata0_0_lat :
 					sbuf_s1_0_dec_l2 ? sbus_rdata1_0_lat :
 					sbuf_s0_1_dec_l2 ? sbus_rdata0_1_lat :
 					sbuf_s1_1_dec_l2 ? sbus_rdata1_1_lat :
-					ibuf_a0_dec ? a_in0_lat :
-					ibuf_a1_dec ? a_in1_lat :
-					ibuf_b0_dec ? b_in0_lat :
-					ibuf_b1_dec ? b_in1_lat :
+					ibuf_a0_ren_l2 ? a_in0_lat :
+					ibuf_a1_ren_l2 ? a_in1_lat :
+					ibuf_b0_ren_l2 ? b_in0_lat :
+					ibuf_b1_ren_l2 ? b_in1_lat :
 					status_read_en ? { 15'd0, run_status} : 16'd0;
 wire finish0_0;
 wire finish1_0;

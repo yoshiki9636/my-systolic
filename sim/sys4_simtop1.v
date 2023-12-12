@@ -40,13 +40,17 @@ initial $readmemh("./testa1.txt", systolic4.iobuf.a1buf.buf_ab.ram);
 initial $readmemh("./testb0.txt", systolic4.iobuf.b0buf.buf_ab.ram);
 initial $readmemh("./testb1.txt", systolic4.iobuf.b1buf.buf_ab.ram);
 
-`define SYS_START_ADR 16'hFFF0
-`define SYS_MAX_CNTR 16'hFFF1
-`define SYS_RUN_CNTR 16'hFFF2
-`define OBUFS0_0_HEAD 7'h40 // 
+`define IBUFA0_HEAD 6'h00
+`define IBUFA1_HEAD 6'h01
+`define IBUFB0_HEAD 6'h02
+`define IBUFB1_HEAD 6'h03
+`define OBUFS0_0_HEAD 7'h40
 `define OBUFS1_0_HEAD 7'h41
 `define OBUFS0_1_HEAD 7'h42
 `define OBUFS1_1_HEAD 7'h43
+`define SYS_START_ADR 16'hFFF0
+`define SYS_MAX_CNTR 16'hFFF1
+`define SYS_RUN_CNTR 16'hFFF2
 
 initial begin
 	ren = 1'b0;
@@ -155,6 +159,93 @@ initial begin
 	ibus_radr = { `OBUFS0_1_HEAD, 9'h100 };
 #10
 	ibus_radr = { `OBUFS1_1_HEAD, 9'h100 };
+#100
+	ren = 1'b0;
+	ibus_wadr = { `IBUFA0_HEAD, 8'h00 };
+	ibus_wdata = 16'h0000;
+#10
+	ibus_wadr = { `IBUFA0_HEAD, 8'h01 };
+	ibus_wdata = 16'h1111;
+#10
+	ibus_wadr = { `IBUFA0_HEAD, 8'h02 };
+	ibus_wdata = 16'h2222;
+#10
+	ibus_wadr = { `IBUFA0_HEAD, 8'h03 };
+	ibus_wdata = 16'h3333;
+#10
+
+	ibus_wadr = { `IBUFA1_HEAD, 8'h04 };
+	ibus_wdata = 16'h4444;
+#10
+	ibus_wadr = { `IBUFA1_HEAD, 8'h05 };
+	ibus_wdata = 16'h5555;
+#10
+	ibus_wadr = { `IBUFA1_HEAD, 8'h06 };
+	ibus_wdata = 16'h6666;
+#10
+	ibus_wadr = { `IBUFA1_HEAD, 8'h07 };
+	ibus_wdata = 16'h7777;
+#10
+
+	ibus_wadr = { `IBUFB0_HEAD, 8'h00 };
+	ibus_wdata = 16'h8888;
+#10
+	ibus_wadr = { `IBUFB0_HEAD, 8'h01 };
+	ibus_wdata = 16'h9999;
+#10
+	ibus_wadr = { `IBUFB0_HEAD, 8'h02 };
+	ibus_wdata = 16'haaaa;
+#10
+	ibus_wadr = { `IBUFB0_HEAD, 8'h03 };
+	ibus_wdata = 16'hbbbb;
+
+#10
+	ibus_wadr = { `IBUFB1_HEAD, 8'h04 };
+	ibus_wdata = 16'hcccc;
+#10
+	ibus_wadr = { `IBUFB1_HEAD, 8'h05 };
+	ibus_wdata = 16'hdddd;
+#10
+	ibus_wadr = { `IBUFB1_HEAD, 8'h06 };
+	ibus_wdata = 16'heeee;
+#10
+	ibus_wadr = { `IBUFB1_HEAD, 8'h07 };
+	ibus_wdata = 16'hffff;
+
+#100
+	ren = 1'b1;
+	ibus_radr = { `IBUFA0_HEAD, 8'h00 };
+#10
+	ibus_radr = { `IBUFA0_HEAD, 8'h01 };
+#10
+	ibus_radr = { `IBUFA0_HEAD, 8'h02 };
+#10
+	ibus_radr = { `IBUFA0_HEAD, 8'h03 };
+#10
+	ibus_radr = { `IBUFA1_HEAD, 8'h04 };
+#10
+	ibus_radr = { `IBUFA1_HEAD, 8'h05 };
+#10
+	ibus_radr = { `IBUFA1_HEAD, 8'h06 };
+#10
+	ibus_radr = { `IBUFA1_HEAD, 8'h07 };
+#10
+
+	ibus_radr = { `IBUFB0_HEAD, 8'h00 };
+#10
+	ibus_radr = { `IBUFB0_HEAD, 8'h01 };
+#10
+	ibus_radr = { `IBUFB0_HEAD, 8'h02 };
+#10
+	ibus_radr = { `IBUFB0_HEAD, 8'h03 };
+#10
+	ibus_radr = { `IBUFB1_HEAD, 8'h04 };
+#10
+	ibus_radr = { `IBUFB1_HEAD, 8'h05 };
+#10
+	ibus_radr = { `IBUFB1_HEAD, 8'h06 };
+#10
+	ibus_radr = { `IBUFB1_HEAD, 8'h07 };
 #1000
 
 	$stop;
