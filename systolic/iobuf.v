@@ -77,6 +77,15 @@ end
 
 assign start = write_start & ~run_status;
 
+reg status_read_en;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		status_read_en <= 1'b0;
+	else
+		status_read_en <= ren & (ibus_radr == `SYS_START_ADR);
+end
+
 // running counter
 wire write_run_cntr = wen & (ibus_wadr == `SYS_RUN_CNTR);
 reg [7:0] run_cntr;
@@ -106,20 +115,11 @@ wire ibuf_a1_wen = wen & (ibus_wadr[15:10] == `IBUFA1_HEAD);
 wire ibuf_b0_wen = wen & (ibus_wadr[15:10] == `IBUFB0_HEAD);
 wire ibuf_b1_wen = wen & (ibus_wadr[15:10] == `IBUFB1_HEAD);
 
-reg [6:0] ibus_decaddr;
-
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        ibus_decaddr <= 8'd0;
-    else if (write_max_cntr)
-        ibus_decaddr <= ibus_radr[15:9];
-end
-
-wire [9:0] abbus_radr = ibus_wadr[9:0];
-wire ibuf_a0_dec = (ibus_decaddr[6:1] == `IBUFA0_HEAD);
-wire ibuf_a1_dec = (ibus_decaddr[6:1] == `IBUFA1_HEAD);
-wire ibuf_b0_dec = (ibus_decaddr[6:1] == `IBUFB0_HEAD);
-wire ibuf_b1_dec = (ibus_decaddr[6:1] == `IBUFB1_HEAD);
+wire [9:0] abbus_radr = ibus_radr[9:0];
+wire ibuf_a0_dec = (ibus_radr[15:10] == `IBUFA0_HEAD);
+wire ibuf_a1_dec = (ibus_radr[15:10] == `IBUFA1_HEAD);
+wire ibuf_b0_dec = (ibus_radr[15:10] == `IBUFB0_HEAD);
+wire ibuf_b1_dec = (ibus_radr[15:10] == `IBUFB1_HEAD);
 wire ibuf_a0_ren = ren & ibuf_a0_dec;
 wire ibuf_a1_ren = ren & ibuf_a1_dec;
 wire ibuf_b0_ren = ren & ibuf_b0_dec;
@@ -195,24 +195,145 @@ abbuf b1buf (
 // read part
 wire [8:0] sbus_radr = ibus_radr[8:0];
 
-wire sbuf_s0_0_dec = (ibus_decaddr == `OBUFS0_0_HEAD);
-wire sbuf_s1_0_dec = (ibus_decaddr == `OBUFS1_0_HEAD);
-wire sbuf_s0_1_dec = (ibus_decaddr == `OBUFS0_1_HEAD);
-wire sbuf_s1_1_dec = (ibus_decaddr == `OBUFS1_1_HEAD);
+wire sbuf_s0_0_dec = (ibus_radr[15:9] == `OBUFS0_0_HEAD);
+wire sbuf_s1_0_dec = (ibus_radr[15:9] == `OBUFS1_0_HEAD);
+wire sbuf_s0_1_dec = (ibus_radr[15:9] == `OBUFS0_1_HEAD);
+wire sbuf_s1_1_dec = (ibus_radr[15:9] == `OBUFS1_1_HEAD);
+reg sbuf_s0_0_dec_l1;
+reg sbuf_s0_0_dec_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n) begin
+		 sbuf_s0_0_dec_l1 <= 1'b0;
+		 sbuf_s0_0_dec_l2 <= 1'b0;
+	end
+	else begin
+		 sbuf_s0_0_dec_l1 <= sbuf_s0_0_dec;
+		 sbuf_s0_0_dec_l2 <= sbuf_s0_0_dec_l1;
+	end
+end
+
+reg sbuf_s1_0_dec_l1;
+reg sbuf_s1_0_dec_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n) begin
+		 sbuf_s1_0_dec_l1 <= 1'b0;
+		 sbuf_s1_0_dec_l2 <= 1'b0;
+	end
+	else begin
+		 sbuf_s1_0_dec_l1 <= sbuf_s1_0_dec;
+		 sbuf_s1_0_dec_l2 <= sbuf_s1_0_dec_l1;
+	end
+end
+
+reg sbuf_s0_1_dec_l1;
+reg sbuf_s0_1_dec_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n) begin
+		 sbuf_s0_1_dec_l1 <= 1'b0;
+		 sbuf_s0_1_dec_l2 <= 1'b0;
+	end
+	else begin
+		 sbuf_s0_1_dec_l1 <= sbuf_s0_1_dec;
+		 sbuf_s0_1_dec_l2 <= sbuf_s0_1_dec_l1;
+	end
+end
+
+reg sbuf_s1_1_dec_l1;
+reg sbuf_s1_1_dec_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n) begin
+		 sbuf_s1_1_dec_l1 <= 1'b0;
+		 sbuf_s1_1_dec_l2 <= 1'b0;
+	end
+	else begin
+		 sbuf_s1_1_dec_l1 <= sbuf_s1_1_dec;
+		 sbuf_s1_1_dec_l2 <= sbuf_s1_1_dec_l1;
+	end
+end
+
 wire [15:0] sbus_rdata0_0;
 wire [15:0] sbus_rdata1_0;
 wire [15:0] sbus_rdata0_1;
 wire [15:0] sbus_rdata1_1;
+reg [15:0] sbus_rdata0_0_lat;
+reg [15:0] sbus_rdata1_0_lat;
+reg [15:0] sbus_rdata0_1_lat;
+reg [15:0] sbus_rdata1_1_lat;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		sbus_rdata0_0_lat <= 16'd0;
+	else
+		sbus_rdata0_0_lat <= sbus_rdata0_0;
+end
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		sbus_rdata1_0_lat <= 16'd0;
+	else
+		sbus_rdata1_0_lat <= sbus_rdata1_0;
+end
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		sbus_rdata0_1_lat <= 16'd0;
+	else
+		sbus_rdata0_1_lat <= sbus_rdata0_1;
+end
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		sbus_rdata1_1_lat <= 16'd0;
+	else
+		sbus_rdata1_1_lat <= sbus_rdata1_1;
+end
+reg a_in0_lat;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		a_in0_lat <= 16'd0;
+	else
+		a_in0_lat <= a_in0;
+end
+reg a_in1_lat;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		a_in1_lat <= 16'd0;
+	else
+		a_in1_lat <= a_in1;
+end
+reg b_in0_lat;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		b_in0_lat <= 16'd0;
+	else
+		b_in0_lat <= b_in0;
+end
+reg b_in1_lat;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+		b_in1_lat <= 16'd0;
+	else
+		b_in1_lat <= b_in1;
+end
 
 // read bus selector
-assign ibus_rdata = sbuf_s0_0_dec ? sbus_rdata0_0 :
-					sbuf_s1_0_dec ? sbus_rdata1_0 :
-					sbuf_s0_1_dec ? sbus_rdata0_1 :
-					sbuf_s1_1_dec ? sbus_rdata1_1 :
-					ibuf_a0_dec ? a_in0 :
-					ibuf_a1_dec ? a_in1 :
-					ibuf_b0_dec ? b_in0 :
-					ibuf_b1_dec ? b_in1 : 16'd0;
+assign ibus_rdata = sbuf_s0_0_dec_l2 ? sbus_rdata0_0_lat :
+					sbuf_s1_0_dec_l2 ? sbus_rdata1_0_lat :
+					sbuf_s0_1_dec_l2 ? sbus_rdata0_1_lat :
+					sbuf_s1_1_dec_l2 ? sbus_rdata1_1_lat :
+					ibuf_a0_dec ? a_in0_lat :
+					ibuf_a1_dec ? a_in1_lat :
+					ibuf_b0_dec ? b_in0_lat :
+					ibuf_b1_dec ? b_in1_lat :
+					status_read_en ? { 15'd0, run_status} : 16'd0;
 wire finish0_0;
 wire finish1_0;
 wire finish0_1;

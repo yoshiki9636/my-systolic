@@ -12,7 +12,7 @@ module sbuf_1r1w(
 	input clk,
 	input [7:0] ram_radr,
 	output [15:0] ram_rdata,
-	input [9:0] ram_wadr,
+	input [7:0] ram_wadr,
 	input [15:0] ram_wdata,
 	input ram_wen
 	);
