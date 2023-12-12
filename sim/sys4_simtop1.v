@@ -43,6 +43,10 @@ initial $readmemh("./testb1.txt", systolic4.iobuf.b1buf.buf_ab.ram);
 `define SYS_START_ADR 16'hFFF0
 `define SYS_MAX_CNTR 16'hFFF1
 `define SYS_RUN_CNTR 16'hFFF2
+`define OBUFS0_0_HEAD 7'h40 // 
+`define OBUFS1_0_HEAD 7'h41
+`define OBUFS0_1_HEAD 7'h42
+`define OBUFS1_1_HEAD 7'h43
 
 initial begin
 	ren = 1'b0;
@@ -70,7 +74,89 @@ initial begin
 	wen = 1'b1;
 #10
 	wen = 1'b0;
-#10000
+	ren = 1'b1;
+#20
+	ibus_radr = `SYS_START_ADR;
+#2000
+	ibus_radr = `SYS_START_ADR;
+#10
+	ibus_radr = { `OBUFS0_0_HEAD, 9'h000 };
+#10
+	ibus_radr = { `OBUFS0_0_HEAD, 9'h001 };
+#10
+	ibus_radr = { `OBUFS0_0_HEAD, 9'h002 };
+#10
+	ibus_radr = { `OBUFS0_0_HEAD, 9'h003 };
+#10
+	ibus_radr = { `OBUFS0_0_HEAD, 9'h004 };
+#10
+	ibus_radr = { `OBUFS0_0_HEAD, 9'h005 };
+#10
+	ibus_radr = { `OBUFS0_0_HEAD, 9'h006 };
+#10
+	ibus_radr = { `OBUFS0_0_HEAD, 9'h007 };
+#10
+
+	ibus_radr = { `OBUFS1_0_HEAD, 9'h000 };
+#10
+	ibus_radr = { `OBUFS1_0_HEAD, 9'h001 };
+#10
+	ibus_radr = { `OBUFS1_0_HEAD, 9'h002 };
+#10
+	ibus_radr = { `OBUFS1_0_HEAD, 9'h003 };
+#10
+	ibus_radr = { `OBUFS1_0_HEAD, 9'h004 };
+#10
+	ibus_radr = { `OBUFS1_0_HEAD, 9'h005 };
+#10
+	ibus_radr = { `OBUFS1_0_HEAD, 9'h006 };
+#10
+	ibus_radr = { `OBUFS1_0_HEAD, 9'h007 };
+#10
+
+	ibus_radr = { `OBUFS0_1_HEAD, 9'h000 };
+#10
+	ibus_radr = { `OBUFS0_1_HEAD, 9'h001 };
+#10
+	ibus_radr = { `OBUFS0_1_HEAD, 9'h002 };
+#10
+	ibus_radr = { `OBUFS0_1_HEAD, 9'h003 };
+#10
+	ibus_radr = { `OBUFS0_1_HEAD, 9'h004 };
+#10
+	ibus_radr = { `OBUFS0_1_HEAD, 9'h005 };
+#10
+	ibus_radr = { `OBUFS0_1_HEAD, 9'h006 };
+#10
+	ibus_radr = { `OBUFS0_1_HEAD, 9'h007 };
+#10
+
+	ibus_radr = { `OBUFS1_1_HEAD, 9'h000 };
+#10
+	ibus_radr = { `OBUFS1_1_HEAD, 9'h001 };
+#10
+	ibus_radr = { `OBUFS1_1_HEAD, 9'h002 };
+#10
+	ibus_radr = { `OBUFS1_1_HEAD, 9'h003 };
+#10
+	ibus_radr = { `OBUFS1_1_HEAD, 9'h004 };
+#10
+	ibus_radr = { `OBUFS1_1_HEAD, 9'h005 };
+#10
+	ibus_radr = { `OBUFS1_1_HEAD, 9'h006 };
+#10
+	ibus_radr = { `OBUFS1_1_HEAD, 9'h007 };
+#10
+
+	ibus_radr = { `OBUFS0_0_HEAD, 9'h100 };
+#10
+	ibus_radr = { `OBUFS1_0_HEAD, 9'h100 };
+#10
+	ibus_radr = { `OBUFS0_1_HEAD, 9'h100 };
+#10
+	ibus_radr = { `OBUFS1_1_HEAD, 9'h100 };
+#1000
+
 	$stop;
 end
 
