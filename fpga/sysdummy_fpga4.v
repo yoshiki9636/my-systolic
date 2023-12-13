@@ -22,6 +22,10 @@ module dummy_fpga_top(
 
 wire clk;
 
+reg rstn;
+always @ (posedge clkin)
+	rstn <= rst_n;
+
 `ifdef ARTY_A7
 wire locked;
  // Instantiation of the clocking network
@@ -51,11 +55,19 @@ pll pll (
 
 // output
 wire [15:0] ibus_rdata; // output
+reg [15:0] ibus_rdata_post; // output
 
-wire tx_pre = ^ibus_rdata; 
+always @ (posedge clk or negedge rstn) begin
+	if (~rstn)
+		ibus_rdata_post <= 16'd0;
+	else
+		ibus_rdata_post <= ibus_rdata;
+end
 
-always @ (posedge clk or negedge rst_n) begin
-	if (~rst_n)
+wire tx_pre = ^ibus_rdata_post; 
+
+always @ (posedge clk or negedge rstn) begin
+	if (~rstn)
 		tx <= 1'b0;
 	else
 		tx <= tx_pre;
@@ -69,8 +81,8 @@ reg ren; // input
 reg wen; // input
 
 
-always @ (posedge clk or negedge rst_n) begin
-	if (~rst_n) begin
+always @ (posedge clk or negedge rstn) begin
+	if (~rstn) begin
 		ibus_radr <= 16'd0;
 		ibus_wadr <= 16'd0;
 		ibus_wdata <= 16'd0;
@@ -86,9 +98,9 @@ always @ (posedge clk or negedge rst_n) begin
 	end
 end
 
-systolic4 systolic4 (
+systolic4 systolic (
 	.clk(clkin),
-	.rst_n(rst_n),
+	.rst_n(rstn),
 	.ren(ren),
 	.ibus_radr(ibus_radr),
 	.ibus_rdata(ibus_rdata),
