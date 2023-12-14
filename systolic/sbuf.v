@@ -87,7 +87,7 @@ end
 // satuation bits buffer
 reg [3:0] sat_cntr;
 reg [15:0] sat_agg;
-reg [9:0] sbuf_sa_wadr;
+reg [7:0] sbuf_sa_wadr;
 
 // satuation bit counter
 always @ (posedge clk or negedge rst_n) begin
@@ -116,11 +116,11 @@ end
 // address counter
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
-        sbuf_sa_wadr <= 10'd0;
+        sbuf_sa_wadr <= 8'd0;
     else if (start)
-        sbuf_sa_wadr <= 10'd0;
+        sbuf_sa_wadr <= 8'd0;
 	else if (sat_wen)
-        sbuf_sa_wadr <= sbuf_sa_wadr + 10'd1;
+        sbuf_sa_wadr <= sbuf_sa_wadr + 8'd1;
 end
 
 // output buffers

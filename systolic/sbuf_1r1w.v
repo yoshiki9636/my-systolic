@@ -19,7 +19,7 @@ module sbuf_1r1w(
 
 // 16x1024 1r1w RAM
 reg[15:0] ram[0:255];
-reg[11:0] radr;
+reg[7:0] radr;
 
 always @ (posedge clk) begin
 	if (ram_wen)
