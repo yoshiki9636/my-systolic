@@ -17,11 +17,17 @@ module iobuf(
 	input clk,
 	input rst_n,
 
+	input dma_io_we,
+	input [15:2] dma_io_wadr,
+	input [15:0] dma_io_wdata,
+	input [15:2] dma_io_radr,
+	input [15:0] dma_io_rdata_in,
+	output [15:0] dma_io_rdata,
 	// ram interface
-	input ren,
+	input ibus_ren,
 	input [15:0] ibus_radr,
 	output [15:0] ibus_rdata,
-	input wen,
+	input ibus_wen,
 	input [15:0] ibus_wadr,
 	input [15:0] ibus_wdata,
 
@@ -86,12 +92,12 @@ for ($j = 0; $j < $n; $j++) {
 
 $nm1 = $n - 1;
 
-print "`define SYS_START_ADR 16'hFFF0
-`define SYS_MAX_CNTR 16'hFFF1
-`define SYS_RUN_CNTR 16'hFFF2
+print "`define SYS_START_ADR 14'h3FF8
+`define SYS_MAX_CNTR 14'h3FF9
+`define SYS_RUN_CNTR 14'h3FFa
 
 // 1shot start bit
-wire write_start = wen & (ibus_wadr == `SYS_START_ADR);
+wire write_start = dma_io_we & (dma_io_wadr == `SYS_START_ADR);
 reg run_status;
 wire finish${nm1}_${nm1};
 
@@ -106,35 +112,34 @@ end
 
 assign start = write_start & ~run_status;
 
-reg status_read_en;
-
-always @ (posedge clk or negedge rst_n) begin
-	if (~rst_n)
-		status_read_en <= 1'b0;
-	else
-		status_read_en <= ren & (ibus_radr == `SYS_START_ADR);
-end
-
 // running counter
-wire write_run_cntr = wen & (ibus_wadr == `SYS_RUN_CNTR);
+wire write_run_cntr = dma_io_we & (dma_io_wadr == `SYS_RUN_CNTR);
 reg [7:0] run_cntr;
 
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
         run_cntr <= 16'd0;
     else if (write_run_cntr)
-        run_cntr <= ibus_wdata[7:0];
+        run_cntr <= dma_io_wdata[7:0];
 end
 
 // max counter
-wire write_max_cntr = wen & (ibus_wadr == `SYS_MAX_CNTR);
+wire write_max_cntr = dma_io_we & (dma_io_wadr == `SYS_MAX_CNTR);
 
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
         max_cntr <= 8'd0;
     else if (write_max_cntr)
-        max_cntr <= ibus_wdata[7:0];
+        max_cntr <= dma_io_wdata[7:0];
 end
+
+wire re_run_status = (dma_io_radr == `SYS_START_ADR);
+wire re_run_maxcntr = (dma_io_radr == `SYS_MAX_CNTR);
+wire re_run_runcntr = (dma_io_radr == `SYS_RUN_CNTR);
+
+assign dma_io_rdata = re_run_status ? { 15'd0, run_status } :
+					  re_run_maxcntr ? { 8'd0, max_cntr } :
+					  re_run_runcntr ? { 8'd0, run_cntr } : dma_io_rdata_in;
 
 // input buffer controls
 // write part
@@ -143,10 +148,10 @@ wire [9:0] abbus_wadr = ibus_wadr[9:0];
 
 
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_a${j}_wen = wen & (ibus_wadr[15:10] == `IBUFA${j}_HEAD);\n";
+	print "wire ibuf_a${j}_wen = ibus_wen & (ibus_wadr[15:10] == `IBUFA${j}_HEAD);\n";
 }
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_b${j}_wen = wen & (ibus_wadr[15:10] == `IBUFB${j}_HEAD);\n";
+	print "wire ibuf_b${j}_wen = ibus_wen & (ibus_wadr[15:10] == `IBUFB${j}_HEAD);\n";
 }
 
 print "
@@ -160,10 +165,10 @@ for ($j = 0; $j < $n; $j++) {
 	print "wire ibuf_b${j}_dec = (ibus_radr[15:10] == `IBUFB${j}_HEAD);\n";
 }
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_a${j}_ren = ren & ibuf_a${j}_dec;\n";
+	print "wire ibuf_a${j}_ren = ibus_ren & ibuf_a${j}_dec;\n";
 }
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_b${j}_ren = ren & ibuf_b${j}_dec;\n";
+	print "wire ibuf_b${j}_ren = ibus_ren & ibuf_b${j}_dec;\n";
 }
 for ($j = 0; $j < $n; $j++) {
 	print "
@@ -345,7 +350,7 @@ for ($j = 0; $j < $n; $j++) {
 	print"					ibuf_b${j}_ren_l2 ? b_in${j}_lat :\n";
 }
 
-print "					status_read_en ? { 15'd0, run_status} : 16'd0;\n";
+print "					16'd0;\n";
 
 
 for ($j = 0; $j < $n; $j++) {

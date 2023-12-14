@@ -18,11 +18,18 @@ module systolic${n2}(
 	input clk,
 	input rst_n,
 
-	// ram interface
-	input ren,
+	// io register interface
+	input dma_io_we,
+	input [15:2] dma_io_wadr,
+	input [15:0] dma_io_wdata,
+	input [15:2] dma_io_radr,
+	input [15:0] dma_io_rdata_in,
+	output [15:0] dma_io_rdata,
+	// buffers ram interface
+	input ibus_ren,
 	input [15:0] ibus_radr,
 	output [15:0] ibus_rdata,
-	input wen,
+	input ibus_wen,
 	input [15:0] ibus_wadr,
 	input [15:0] ibus_wdata
 
@@ -68,10 +75,16 @@ print "
 iobuf iobuf (
 	.clk(clk),
 	.rst_n(rst_n),
-	.ren(ren),
+	.dma_io_we(dma_io_we),
+	.dma_io_wadr(dma_io_wadr),
+	.dma_io_wdata(dma_io_wdata),
+	.dma_io_radr(dma_io_radr),
+	.dma_io_rdata_in(dma_io_rdata_in),
+	.dma_io_rdata(dma_io_rdata),
+	.ibus_ren(ibus_ren),
 	.ibus_radr(ibus_radr),
 	.ibus_rdata(ibus_rdata),
-	.wen(wen),
+	.ibus_wen(ibus_wen),
 	.ibus_wadr(ibus_wadr),
 	.ibus_wdata(ibus_wdata),
 ";
