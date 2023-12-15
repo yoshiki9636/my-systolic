@@ -25,10 +25,10 @@ module iobuf(
 	output [15:0] dma_io_rdata,
 	// ram interface
 	input ibus_ren,
-	input [15:0] ibus_radr,
+	input [15:2] ibus_radr,
 	output [15:0] ibus_rdata,
 	input ibus_wen,
-	input [15:0] ibus_wadr,
+	input [15:2] ibus_wadr,
 	input [15:0] ibus_wdata,
 
 	// systolice array inbuffer interface
@@ -76,16 +76,16 @@ for ($j = 0; $j < $n; $j++) {
 print "	);\n";
 
 for ($j = 0; $j < $n; $j++) {
-	print "`define IBUFA${j}_HEAD 6'h0$j\n";
+	print "`define IBUFA${j}_HEAD 4'h$j\n";
 }
 for ($j = 0; $j < $n; $j++) {
 	$j2 = $n + $j;
-	print "`define IBUFB${j}_HEAD 6'h0$j2\n";
+	print "`define IBUFB${j}_HEAD 4'h$j2\n";
 }
 $ij = 0;
 for ($j = 0; $j < $n; $j++) {
 	for ($i = 0; $i < $n; $i++) {
-		print "`define OBUFS${i}_${j}_HEAD 7'h4${ij}\n";
+		print "`define OBUFS${i}_${j}_HEAD 5'h1${ij}\n";
 		$ij++;
 	}
 }
@@ -143,26 +143,26 @@ assign dma_io_rdata = re_run_status ? { 15'd0, run_status } :
 
 // input buffer controls
 // write part
-wire [9:0] abbus_wadr = ibus_wadr[9:0];
+wire [9:0] abbus_wadr = ibus_wadr[11:2];
 ";
 
 
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_a${j}_wen = ibus_wen & (ibus_wadr[15:10] == `IBUFA${j}_HEAD);\n";
+	print "wire ibuf_a${j}_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA${j}_HEAD);\n";
 }
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_b${j}_wen = ibus_wen & (ibus_wadr[15:10] == `IBUFB${j}_HEAD);\n";
+	print "wire ibuf_b${j}_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB${j}_HEAD);\n";
 }
 
 print "
-wire [9:0] abbus_radr = ibus_radr[9:0];
+wire [9:0] abbus_radr = ibus_radr[11:2];
 ";
 
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_a${j}_dec = (ibus_radr[15:10] == `IBUFA${j}_HEAD);\n";
+	print "wire ibuf_a${j}_dec = (ibus_radr[15:12] == `IBUFA${j}_HEAD);\n";
 }
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_b${j}_dec = (ibus_radr[15:10] == `IBUFB${j}_HEAD);\n";
+	print "wire ibuf_b${j}_dec = (ibus_radr[15:12] == `IBUFB${j}_HEAD);\n";
 }
 for ($j = 0; $j < $n; $j++) {
 	print "wire ibuf_a${j}_ren = ibus_ren & ibuf_a${j}_dec;\n";
@@ -254,13 +254,13 @@ abbuf b${j}buf (
 print "
 // outbuffer controls
 // read part
-wire [8:0] sbus_radr = ibus_radr[8:0];
+wire [8:0] sbus_radr = ibus_radr[10:2];
 
 ";
 
 for ($j = 0; $j < $n; $j++) {
 	for ($i = 0; $i < $n; $i++) {
-		print "wire sbuf_s${i}_${j}_dec = (ibus_radr[15:9] == `OBUFS${i}_${j}_HEAD);\n";
+		print "wire sbuf_s${i}_${j}_dec = (ibus_radr[15:11] == `OBUFS${i}_${j}_HEAD);\n";
 	}
 }
 

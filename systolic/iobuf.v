@@ -20,10 +20,10 @@ module iobuf(
 	output [15:0] dma_io_rdata,
 	// ram interface
 	input ibus_ren,
-	input [15:0] ibus_radr,
+	input [15:2] ibus_radr,
 	output [15:0] ibus_rdata,
 	input ibus_wen,
-	input [15:0] ibus_wadr,
+	input [15:2] ibus_wadr,
 	input [15:0] ibus_wdata,
 
 	// systolice array inbuffer interface
@@ -55,14 +55,14 @@ module iobuf(
 	input sw0_1,
 	input sw1_1
 	);
-`define IBUFA0_HEAD 6'h00
-`define IBUFA1_HEAD 6'h01
-`define IBUFB0_HEAD 6'h02
-`define IBUFB1_HEAD 6'h03
-`define OBUFS0_0_HEAD 7'h40
-`define OBUFS1_0_HEAD 7'h41
-`define OBUFS0_1_HEAD 7'h42
-`define OBUFS1_1_HEAD 7'h43
+`define IBUFA0_HEAD 4'h0
+`define IBUFA1_HEAD 4'h1
+`define IBUFB0_HEAD 4'h2
+`define IBUFB1_HEAD 4'h3
+`define OBUFS0_0_HEAD 5'h10
+`define OBUFS1_0_HEAD 5'h11
+`define OBUFS0_1_HEAD 5'h12
+`define OBUFS1_1_HEAD 5'h13
 `define SYS_START_ADR 14'h3FF8
 `define SYS_MAX_CNTR 14'h3FF9
 `define SYS_RUN_CNTR 14'h3FFa
@@ -114,17 +114,17 @@ assign dma_io_rdata = re_run_status ? { 15'd0, run_status } :
 
 // input buffer controls
 // write part
-wire [9:0] abbus_wadr = ibus_wadr[9:0];
-wire ibuf_a0_wen = ibus_wen & (ibus_wadr[15:10] == `IBUFA0_HEAD);
-wire ibuf_a1_wen = ibus_wen & (ibus_wadr[15:10] == `IBUFA1_HEAD);
-wire ibuf_b0_wen = ibus_wen & (ibus_wadr[15:10] == `IBUFB0_HEAD);
-wire ibuf_b1_wen = ibus_wen & (ibus_wadr[15:10] == `IBUFB1_HEAD);
+wire [9:0] abbus_wadr = ibus_wadr[11:2];
+wire ibuf_a0_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA0_HEAD);
+wire ibuf_a1_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA1_HEAD);
+wire ibuf_b0_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB0_HEAD);
+wire ibuf_b1_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB1_HEAD);
 
-wire [9:0] abbus_radr = ibus_radr[9:0];
-wire ibuf_a0_dec = (ibus_radr[15:10] == `IBUFA0_HEAD);
-wire ibuf_a1_dec = (ibus_radr[15:10] == `IBUFA1_HEAD);
-wire ibuf_b0_dec = (ibus_radr[15:10] == `IBUFB0_HEAD);
-wire ibuf_b1_dec = (ibus_radr[15:10] == `IBUFB1_HEAD);
+wire [9:0] abbus_radr = ibus_radr[11:2];
+wire ibuf_a0_dec = (ibus_radr[15:12] == `IBUFA0_HEAD);
+wire ibuf_a1_dec = (ibus_radr[15:12] == `IBUFA1_HEAD);
+wire ibuf_b0_dec = (ibus_radr[15:12] == `IBUFB0_HEAD);
+wire ibuf_b1_dec = (ibus_radr[15:12] == `IBUFB1_HEAD);
 wire ibuf_a0_ren = ibus_ren & ibuf_a0_dec;
 wire ibuf_a1_ren = ibus_ren & ibuf_a1_dec;
 wire ibuf_b0_ren = ibus_ren & ibuf_b0_dec;
@@ -254,12 +254,12 @@ abbuf b1buf (
 
 // outbuffer controls
 // read part
-wire [8:0] sbus_radr = ibus_radr[8:0];
+wire [8:0] sbus_radr = ibus_radr[10:2];
 
-wire sbuf_s0_0_dec = (ibus_radr[15:9] == `OBUFS0_0_HEAD);
-wire sbuf_s1_0_dec = (ibus_radr[15:9] == `OBUFS1_0_HEAD);
-wire sbuf_s0_1_dec = (ibus_radr[15:9] == `OBUFS0_1_HEAD);
-wire sbuf_s1_1_dec = (ibus_radr[15:9] == `OBUFS1_1_HEAD);
+wire sbuf_s0_0_dec = (ibus_radr[15:11] == `OBUFS0_0_HEAD);
+wire sbuf_s1_0_dec = (ibus_radr[15:11] == `OBUFS1_0_HEAD);
+wire sbuf_s0_1_dec = (ibus_radr[15:11] == `OBUFS0_1_HEAD);
+wire sbuf_s1_1_dec = (ibus_radr[15:11] == `OBUFS1_1_HEAD);
 reg sbuf_s0_0_dec_l1;
 reg sbuf_s0_0_dec_l2;
 

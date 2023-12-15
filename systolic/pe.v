@@ -11,8 +11,8 @@
 module pe(
 	input clk,
 	input rst_n,
-	input signed [15:0] a_in,
-	input signed [15:0] b_in,
+	input [15:0] a_in,
+	input [15:0] b_in,
 	input start,
 	input awe,
 	input bwe,
@@ -23,15 +23,15 @@ module pe(
 	output se,
 	output fout,
 	output sat,
-	output signed [15:0] s_out,
-	output reg signed [15:0] a_out,
-	output reg signed [15:0] b_out,
+	output [15:0] s_out,
+	output reg [15:0] a_out,
+	output reg [15:0] b_out,
 	output reg start_next,
 	input [7:0] max_cntr
 	);
 
-wire signed [15:0] a_value;
-wire signed [15:0] b_value;
+wire [15:0] a_value;
+wire [15:0] b_value;
 wire aen;
 wire ben;
 wire men;
@@ -43,6 +43,7 @@ reg sreset;
 reg aen_int;
 reg ben_int;
 
+//(*keep_hierarchy="yes"*)dsp dsp (
 dsp dsp (
 	.clk(clk),
 	.rst_n(rst_n),
@@ -149,14 +150,14 @@ end
 
 assign sen = men_post & ~ais & ~bis;
 
-reg sen_post;
+//reg sen_post;
 
-always @ (posedge clk or negedge rst_n) begin
-	if (~rst_n)
-        sen_post <= 1'b0;
-	else if (~ais & ~bis)
-        sen_post <= sen;
-end
+//always @ (posedge clk or negedge rst_n) begin
+	//if (~rst_n)
+        //sen_post <= 1'b0;
+	//else if (~ais & ~bis)
+        //sen_post <= sen;
+//end
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)

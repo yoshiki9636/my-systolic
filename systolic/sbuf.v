@@ -99,7 +99,7 @@ always @ (posedge clk or negedge rst_n) begin
         sat_cntr <= sat_cntr + 4'd1;
 end
 
-wire sat_wen = ((sat_cntr == 4'hf) & sat) | finish;
+wire sat_wen = ((sat_cntr == 4'hf) & sw) | finish;
 
 // bit aggrigator
 always @ (posedge clk or negedge rst_n) begin
