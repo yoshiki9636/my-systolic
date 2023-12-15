@@ -42,7 +42,7 @@ set_property OFFCHIP_TERM NONE [get_ports rgb_led[1]]
 set_property OFFCHIP_TERM NONE [get_ports rgb_led[0]]
 create_clock -period 10.000 -name clkin -waveform {0.000 5.000} [get_ports clkin]
 
-create_generated_clock -name clk [get_pins fpga_top/clknetwork/clk_out1]
+create_generated_clock -name clk [get_pins fpga_all_top/clknetwork/clk_out1]
 set_input_delay -clock [get_clocks  clk_out1_clk_wiz_0] -min -add_delay 1.000 [get_ports rst_n]
 set_input_delay -clock [get_clocks  clk_out1_clk_wiz_0] -max -add_delay 1.000 [get_ports rst_n]
 set_input_delay -clock [get_clocks  clk_out1_clk_wiz_0] -min -add_delay 1.000 [get_ports rx]
