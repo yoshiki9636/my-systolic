@@ -12,32 +12,32 @@ nop
 nop
 ; clear LED to black
 addi x1, x0, 7 ; LED value
-lui x2, 0xc000f ; LED address
-ori x2, x2, 0xe00 ;
+lui x2, 0xc0010 ; LED address +1
+addi x2, x2, 0xe00 ;
 sh x1, 0x0(x2) ; set LED
 ; setup dma registers
 ; DMA IO start adr
-lui x3, 0xc000f ; DMA base address
-ori x3, x3, 0xfc4 ;
+lui x3, 0xc0010 ; DMA base address + 1
+addi x3, x3, 0xfc4 ;
 and x4, x0, x0 ; clear : start 0
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 xor x4, x4, x4 ; clear : start 0
 ori x4, x4, 0x0 ; memory start 0
-lui x3, 0xc000f ; DMA base address
-ori x3, x3, 0xfc8 ;
+lui x3, 0xc0010 ; DMA base address + 1
+addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA data counter
 xor x4, x4, x4 ; clear : start 0
 ori x4, x4, 0x20 ; DMA data counter
-lui x3, 0xc000f ; DMA base address
-ori x3, x3, 0xfcc ;
+lui x3, 0xc0010 ; DMA base address + 1
+addi x3, x3, 0xfcc ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA write start
 xor x4, x4, x4 ; clear : start 0
 ori x4, x4, 0x2 ; memory start 100
-lui x3, 0xc000f ; DMA base address
-ori x3, x3, 0xfc0 ;
+lui x3, 0xc0010 ; DMA base address + 1
+addi x3, x3, 0xfc0 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; wait finish
 :label_read_loop
@@ -46,14 +46,14 @@ beq x5, x4, label_read_loop
 ; DMA mem start adr
 xor x4, x4, x4 ; clear : start 0
 ori x4, x4, 0x30 ; memory start 30
-lui x3, 0xc000f ; DMA base address
-ori x3, x3, 0xfc8 ;
+lui x3, 0xc0010 ; DMA base address + 1
+addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA read start
 xor x4, x4, x4 ; clear : start 0
 ori x4, x4, 0x1 ; DMA data counter
-lui x3, 0xc000f ; DMA base address
-ori x3, x3, 0xfc0 ;
+lui x3, 0xc0010 ; DMA base address + 1
+addi x3, x3, 0xfc0 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; wait finish
 :label_write_loop
