@@ -12,12 +12,18 @@ module iobuf(
 	input clk,
 	input rst_n,
 
+	input dma_io_we,
+	input [15:2] dma_io_wadr,
+	input [15:0] dma_io_wdata,
+	input [15:2] dma_io_radr,
+	input [15:0] dma_io_rdata_in,
+	output [15:0] dma_io_rdata,
 	// ram interface
-	input ren,
-	input [15:0] ibus_radr,
+	input ibus_ren,
+	input [15:2] ibus_radr,
 	output [15:0] ibus_rdata,
-	input wen,
-	input [15:0] ibus_wadr,
+	input ibus_wen,
+	input [15:2] ibus_wadr,
 	input [15:0] ibus_wdata,
 
 	// systolice array inbuffer interface
@@ -169,60 +175,60 @@ module iobuf(
 	input sw4_5,
 	input sw5_5
 	);
-`define IBUFA0_HEAD 6'h00
-`define IBUFA1_HEAD 6'h01
-`define IBUFA2_HEAD 6'h02
-`define IBUFA3_HEAD 6'h03
-`define IBUFA4_HEAD 6'h04
-`define IBUFA5_HEAD 6'h05
-`define IBUFB0_HEAD 6'h06
-`define IBUFB1_HEAD 6'h07
-`define IBUFB2_HEAD 6'h08
-`define IBUFB3_HEAD 6'h09
-`define IBUFB4_HEAD 6'h010
-`define IBUFB5_HEAD 6'h011
-`define OBUFS0_0_HEAD 7'h40
-`define OBUFS1_0_HEAD 7'h41
-`define OBUFS2_0_HEAD 7'h42
-`define OBUFS3_0_HEAD 7'h43
-`define OBUFS4_0_HEAD 7'h44
-`define OBUFS5_0_HEAD 7'h45
-`define OBUFS0_1_HEAD 7'h46
-`define OBUFS1_1_HEAD 7'h47
-`define OBUFS2_1_HEAD 7'h48
-`define OBUFS3_1_HEAD 7'h49
-`define OBUFS4_1_HEAD 7'h410
-`define OBUFS5_1_HEAD 7'h411
-`define OBUFS0_2_HEAD 7'h412
-`define OBUFS1_2_HEAD 7'h413
-`define OBUFS2_2_HEAD 7'h414
-`define OBUFS3_2_HEAD 7'h415
-`define OBUFS4_2_HEAD 7'h416
-`define OBUFS5_2_HEAD 7'h417
-`define OBUFS0_3_HEAD 7'h418
-`define OBUFS1_3_HEAD 7'h419
-`define OBUFS2_3_HEAD 7'h420
-`define OBUFS3_3_HEAD 7'h421
-`define OBUFS4_3_HEAD 7'h422
-`define OBUFS5_3_HEAD 7'h423
-`define OBUFS0_4_HEAD 7'h424
-`define OBUFS1_4_HEAD 7'h425
-`define OBUFS2_4_HEAD 7'h426
-`define OBUFS3_4_HEAD 7'h427
-`define OBUFS4_4_HEAD 7'h428
-`define OBUFS5_4_HEAD 7'h429
-`define OBUFS0_5_HEAD 7'h430
-`define OBUFS1_5_HEAD 7'h431
-`define OBUFS2_5_HEAD 7'h432
-`define OBUFS3_5_HEAD 7'h433
-`define OBUFS4_5_HEAD 7'h434
-`define OBUFS5_5_HEAD 7'h435
-`define SYS_START_ADR 16'hFFF0
-`define SYS_MAX_CNTR 16'hFFF1
-`define SYS_RUN_CNTR 16'hFFF2
+`define IBUFA0_HEAD 4'h0
+`define IBUFA1_HEAD 4'h1
+`define IBUFA2_HEAD 4'h2
+`define IBUFA3_HEAD 4'h3
+`define IBUFA4_HEAD 4'h4
+`define IBUFA5_HEAD 4'h5
+`define IBUFB0_HEAD 4'h6
+`define IBUFB1_HEAD 4'h7
+`define IBUFB2_HEAD 4'h8
+`define IBUFB3_HEAD 4'h9
+`define IBUFB4_HEAD 4'h10
+`define IBUFB5_HEAD 4'h11
+`define OBUFS0_0_HEAD 5'h10
+`define OBUFS1_0_HEAD 5'h11
+`define OBUFS2_0_HEAD 5'h12
+`define OBUFS3_0_HEAD 5'h13
+`define OBUFS4_0_HEAD 5'h14
+`define OBUFS5_0_HEAD 5'h15
+`define OBUFS0_1_HEAD 5'h16
+`define OBUFS1_1_HEAD 5'h17
+`define OBUFS2_1_HEAD 5'h18
+`define OBUFS3_1_HEAD 5'h19
+`define OBUFS4_1_HEAD 5'h110
+`define OBUFS5_1_HEAD 5'h111
+`define OBUFS0_2_HEAD 5'h112
+`define OBUFS1_2_HEAD 5'h113
+`define OBUFS2_2_HEAD 5'h114
+`define OBUFS3_2_HEAD 5'h115
+`define OBUFS4_2_HEAD 5'h116
+`define OBUFS5_2_HEAD 5'h117
+`define OBUFS0_3_HEAD 5'h118
+`define OBUFS1_3_HEAD 5'h119
+`define OBUFS2_3_HEAD 5'h120
+`define OBUFS3_3_HEAD 5'h121
+`define OBUFS4_3_HEAD 5'h122
+`define OBUFS5_3_HEAD 5'h123
+`define OBUFS0_4_HEAD 5'h124
+`define OBUFS1_4_HEAD 5'h125
+`define OBUFS2_4_HEAD 5'h126
+`define OBUFS3_4_HEAD 5'h127
+`define OBUFS4_4_HEAD 5'h128
+`define OBUFS5_4_HEAD 5'h129
+`define OBUFS0_5_HEAD 5'h130
+`define OBUFS1_5_HEAD 5'h131
+`define OBUFS2_5_HEAD 5'h132
+`define OBUFS3_5_HEAD 5'h133
+`define OBUFS4_5_HEAD 5'h134
+`define OBUFS5_5_HEAD 5'h135
+`define SYS_START_ADR 14'h3FF8
+`define SYS_MAX_CNTR 14'h3FF9
+`define SYS_RUN_CNTR 14'h3FFa
 
 // 1shot start bit
-wire write_start = wen & (ibus_wadr == `SYS_START_ADR);
+wire write_start = dma_io_we & (dma_io_wadr == `SYS_START_ADR);
 reg run_status;
 wire finish5_5;
 
@@ -237,77 +243,244 @@ end
 
 assign start = write_start & ~run_status;
 
-reg status_read_en;
-
-always @ (posedge clk or negedge rst_n) begin
-	if (~rst_n)
-		status_read_en <= 1'b0;
-	else
-		status_read_en <= ren & (ibus_radr == `SYS_START_ADR);
-end
-
 // running counter
-wire write_run_cntr = wen & (ibus_wadr == `SYS_RUN_CNTR);
+wire write_run_cntr = dma_io_we & (dma_io_wadr == `SYS_RUN_CNTR);
 reg [7:0] run_cntr;
 
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
         run_cntr <= 16'd0;
     else if (write_run_cntr)
-        run_cntr <= ibus_wdata[7:0];
+        run_cntr <= dma_io_wdata[7:0];
 end
 
 // max counter
-wire write_max_cntr = wen & (ibus_wadr == `SYS_MAX_CNTR);
+wire write_max_cntr = dma_io_we & (dma_io_wadr == `SYS_MAX_CNTR);
 
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
         max_cntr <= 8'd0;
     else if (write_max_cntr)
-        max_cntr <= ibus_wdata[7:0];
+        max_cntr <= dma_io_wdata[7:0];
 end
+
+wire re_run_status = (dma_io_radr == `SYS_START_ADR);
+wire re_run_maxcntr = (dma_io_radr == `SYS_MAX_CNTR);
+wire re_run_runcntr = (dma_io_radr == `SYS_RUN_CNTR);
+
+assign dma_io_rdata = re_run_status ? { 15'd0, run_status } :
+					  re_run_maxcntr ? { 8'd0, max_cntr } :
+					  re_run_runcntr ? { 8'd0, run_cntr } : dma_io_rdata_in;
 
 // input buffer controls
 // write part
-wire [9:0] abbus_wadr = ibus_wadr[9:0];
-wire ibuf_a0_wen = wen & (ibus_wadr[15:10] == `IBUFA0_HEAD);
-wire ibuf_a1_wen = wen & (ibus_wadr[15:10] == `IBUFA1_HEAD);
-wire ibuf_a2_wen = wen & (ibus_wadr[15:10] == `IBUFA2_HEAD);
-wire ibuf_a3_wen = wen & (ibus_wadr[15:10] == `IBUFA3_HEAD);
-wire ibuf_a4_wen = wen & (ibus_wadr[15:10] == `IBUFA4_HEAD);
-wire ibuf_a5_wen = wen & (ibus_wadr[15:10] == `IBUFA5_HEAD);
-wire ibuf_b0_wen = wen & (ibus_wadr[15:10] == `IBUFB0_HEAD);
-wire ibuf_b1_wen = wen & (ibus_wadr[15:10] == `IBUFB1_HEAD);
-wire ibuf_b2_wen = wen & (ibus_wadr[15:10] == `IBUFB2_HEAD);
-wire ibuf_b3_wen = wen & (ibus_wadr[15:10] == `IBUFB3_HEAD);
-wire ibuf_b4_wen = wen & (ibus_wadr[15:10] == `IBUFB4_HEAD);
-wire ibuf_b5_wen = wen & (ibus_wadr[15:10] == `IBUFB5_HEAD);
+wire [9:0] abbus_wadr = ibus_wadr[11:2];
+wire ibuf_a0_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA0_HEAD);
+wire ibuf_a1_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA1_HEAD);
+wire ibuf_a2_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA2_HEAD);
+wire ibuf_a3_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA3_HEAD);
+wire ibuf_a4_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA4_HEAD);
+wire ibuf_a5_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA5_HEAD);
+wire ibuf_b0_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB0_HEAD);
+wire ibuf_b1_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB1_HEAD);
+wire ibuf_b2_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB2_HEAD);
+wire ibuf_b3_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB3_HEAD);
+wire ibuf_b4_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB4_HEAD);
+wire ibuf_b5_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB5_HEAD);
 
-wire [9:0] abbus_radr = ibus_radr[9:0];
-wire ibuf_a0_dec = (ibus_radr[15:10] == `IBUFA0_HEAD);
-wire ibuf_a1_dec = (ibus_radr[15:10] == `IBUFA1_HEAD);
-wire ibuf_a2_dec = (ibus_radr[15:10] == `IBUFA2_HEAD);
-wire ibuf_a3_dec = (ibus_radr[15:10] == `IBUFA3_HEAD);
-wire ibuf_a4_dec = (ibus_radr[15:10] == `IBUFA4_HEAD);
-wire ibuf_a5_dec = (ibus_radr[15:10] == `IBUFA5_HEAD);
-wire ibuf_b0_dec = (ibus_radr[15:10] == `IBUFB0_HEAD);
-wire ibuf_b1_dec = (ibus_radr[15:10] == `IBUFB1_HEAD);
-wire ibuf_b2_dec = (ibus_radr[15:10] == `IBUFB2_HEAD);
-wire ibuf_b3_dec = (ibus_radr[15:10] == `IBUFB3_HEAD);
-wire ibuf_b4_dec = (ibus_radr[15:10] == `IBUFB4_HEAD);
-wire ibuf_b5_dec = (ibus_radr[15:10] == `IBUFB5_HEAD);
-wire ibuf_a0_ren = ren & ibuf_a0_dec;
-wire ibuf_a1_ren = ren & ibuf_a1_dec;
-wire ibuf_a2_ren = ren & ibuf_a2_dec;
-wire ibuf_a3_ren = ren & ibuf_a3_dec;
-wire ibuf_a4_ren = ren & ibuf_a4_dec;
-wire ibuf_a5_ren = ren & ibuf_a5_dec;
-wire ibuf_b0_ren = ren & ibuf_b0_dec;
-wire ibuf_b1_ren = ren & ibuf_b1_dec;
-wire ibuf_b2_ren = ren & ibuf_b2_dec;
-wire ibuf_b3_ren = ren & ibuf_b3_dec;
-wire ibuf_b4_ren = ren & ibuf_b4_dec;
-wire ibuf_b5_ren = ren & ibuf_b5_dec;
+wire [9:0] abbus_radr = ibus_radr[11:2];
+wire ibuf_a0_dec = (ibus_radr[15:12] == `IBUFA0_HEAD);
+wire ibuf_a1_dec = (ibus_radr[15:12] == `IBUFA1_HEAD);
+wire ibuf_a2_dec = (ibus_radr[15:12] == `IBUFA2_HEAD);
+wire ibuf_a3_dec = (ibus_radr[15:12] == `IBUFA3_HEAD);
+wire ibuf_a4_dec = (ibus_radr[15:12] == `IBUFA4_HEAD);
+wire ibuf_a5_dec = (ibus_radr[15:12] == `IBUFA5_HEAD);
+wire ibuf_b0_dec = (ibus_radr[15:12] == `IBUFB0_HEAD);
+wire ibuf_b1_dec = (ibus_radr[15:12] == `IBUFB1_HEAD);
+wire ibuf_b2_dec = (ibus_radr[15:12] == `IBUFB2_HEAD);
+wire ibuf_b3_dec = (ibus_radr[15:12] == `IBUFB3_HEAD);
+wire ibuf_b4_dec = (ibus_radr[15:12] == `IBUFB4_HEAD);
+wire ibuf_b5_dec = (ibus_radr[15:12] == `IBUFB5_HEAD);
+wire ibuf_a0_ren = ibus_ren & ibuf_a0_dec;
+wire ibuf_a1_ren = ibus_ren & ibuf_a1_dec;
+wire ibuf_a2_ren = ibus_ren & ibuf_a2_dec;
+wire ibuf_a3_ren = ibus_ren & ibuf_a3_dec;
+wire ibuf_a4_ren = ibus_ren & ibuf_a4_dec;
+wire ibuf_a5_ren = ibus_ren & ibuf_a5_dec;
+wire ibuf_b0_ren = ibus_ren & ibuf_b0_dec;
+wire ibuf_b1_ren = ibus_ren & ibuf_b1_dec;
+wire ibuf_b2_ren = ibus_ren & ibuf_b2_dec;
+wire ibuf_b3_ren = ibus_ren & ibuf_b3_dec;
+wire ibuf_b4_ren = ibus_ren & ibuf_b4_dec;
+wire ibuf_b5_ren = ibus_ren & ibuf_b5_dec;
+
+reg ibuf_a0_ren_l1;
+reg ibuf_a0_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_a0_ren_l1 <= 1'b0;
+         ibuf_a0_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_a0_ren_l1 <= ibuf_a0_ren;
+         ibuf_a0_ren_l2 <= ibuf_a0_ren_l1;
+    end
+end
+
+reg ibuf_a1_ren_l1;
+reg ibuf_a1_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_a1_ren_l1 <= 1'b0;
+         ibuf_a1_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_a1_ren_l1 <= ibuf_a1_ren;
+         ibuf_a1_ren_l2 <= ibuf_a1_ren_l1;
+    end
+end
+
+reg ibuf_a2_ren_l1;
+reg ibuf_a2_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_a2_ren_l1 <= 1'b0;
+         ibuf_a2_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_a2_ren_l1 <= ibuf_a2_ren;
+         ibuf_a2_ren_l2 <= ibuf_a2_ren_l1;
+    end
+end
+
+reg ibuf_a3_ren_l1;
+reg ibuf_a3_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_a3_ren_l1 <= 1'b0;
+         ibuf_a3_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_a3_ren_l1 <= ibuf_a3_ren;
+         ibuf_a3_ren_l2 <= ibuf_a3_ren_l1;
+    end
+end
+
+reg ibuf_a4_ren_l1;
+reg ibuf_a4_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_a4_ren_l1 <= 1'b0;
+         ibuf_a4_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_a4_ren_l1 <= ibuf_a4_ren;
+         ibuf_a4_ren_l2 <= ibuf_a4_ren_l1;
+    end
+end
+
+reg ibuf_a5_ren_l1;
+reg ibuf_a5_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_a5_ren_l1 <= 1'b0;
+         ibuf_a5_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_a5_ren_l1 <= ibuf_a5_ren;
+         ibuf_a5_ren_l2 <= ibuf_a5_ren_l1;
+    end
+end
+
+reg ibuf_b0_ren_l1;
+reg ibuf_b0_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_b0_ren_l1 <= 1'b0;
+         ibuf_b0_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_b0_ren_l1 <= ibuf_b0_ren;
+         ibuf_b0_ren_l2 <= ibuf_b0_ren_l1;
+    end
+end
+
+reg ibuf_b1_ren_l1;
+reg ibuf_b1_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_b1_ren_l1 <= 1'b0;
+         ibuf_b1_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_b1_ren_l1 <= ibuf_b1_ren;
+         ibuf_b1_ren_l2 <= ibuf_b1_ren_l1;
+    end
+end
+
+reg ibuf_b2_ren_l1;
+reg ibuf_b2_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_b2_ren_l1 <= 1'b0;
+         ibuf_b2_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_b2_ren_l1 <= ibuf_b2_ren;
+         ibuf_b2_ren_l2 <= ibuf_b2_ren_l1;
+    end
+end
+
+reg ibuf_b3_ren_l1;
+reg ibuf_b3_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_b3_ren_l1 <= 1'b0;
+         ibuf_b3_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_b3_ren_l1 <= ibuf_b3_ren;
+         ibuf_b3_ren_l2 <= ibuf_b3_ren_l1;
+    end
+end
+
+reg ibuf_b4_ren_l1;
+reg ibuf_b4_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_b4_ren_l1 <= 1'b0;
+         ibuf_b4_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_b4_ren_l1 <= ibuf_b4_ren;
+         ibuf_b4_ren_l2 <= ibuf_b4_ren_l1;
+    end
+end
+
+reg ibuf_b5_ren_l1;
+reg ibuf_b5_ren_l2;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+         ibuf_b5_ren_l1 <= 1'b0;
+         ibuf_b5_ren_l2 <= 1'b0;
+    end
+    else begin
+         ibuf_b5_ren_l1 <= ibuf_b5_ren;
+         ibuf_b5_ren_l2 <= ibuf_b5_ren_l1;
+    end
+end
 wire s_running0_0;
 wire s_running1_0;
 wire s_running2_0;
@@ -529,44 +702,44 @@ abbuf b5buf (
 
 // outbuffer controls
 // read part
-wire [8:0] sbus_radr = ibus_radr[8:0];
+wire [8:0] sbus_radr = ibus_radr[10:2];
 
-wire sbuf_s0_0_dec = (ibus_radr[15:9] == `OBUFS0_0_HEAD);
-wire sbuf_s1_0_dec = (ibus_radr[15:9] == `OBUFS1_0_HEAD);
-wire sbuf_s2_0_dec = (ibus_radr[15:9] == `OBUFS2_0_HEAD);
-wire sbuf_s3_0_dec = (ibus_radr[15:9] == `OBUFS3_0_HEAD);
-wire sbuf_s4_0_dec = (ibus_radr[15:9] == `OBUFS4_0_HEAD);
-wire sbuf_s5_0_dec = (ibus_radr[15:9] == `OBUFS5_0_HEAD);
-wire sbuf_s0_1_dec = (ibus_radr[15:9] == `OBUFS0_1_HEAD);
-wire sbuf_s1_1_dec = (ibus_radr[15:9] == `OBUFS1_1_HEAD);
-wire sbuf_s2_1_dec = (ibus_radr[15:9] == `OBUFS2_1_HEAD);
-wire sbuf_s3_1_dec = (ibus_radr[15:9] == `OBUFS3_1_HEAD);
-wire sbuf_s4_1_dec = (ibus_radr[15:9] == `OBUFS4_1_HEAD);
-wire sbuf_s5_1_dec = (ibus_radr[15:9] == `OBUFS5_1_HEAD);
-wire sbuf_s0_2_dec = (ibus_radr[15:9] == `OBUFS0_2_HEAD);
-wire sbuf_s1_2_dec = (ibus_radr[15:9] == `OBUFS1_2_HEAD);
-wire sbuf_s2_2_dec = (ibus_radr[15:9] == `OBUFS2_2_HEAD);
-wire sbuf_s3_2_dec = (ibus_radr[15:9] == `OBUFS3_2_HEAD);
-wire sbuf_s4_2_dec = (ibus_radr[15:9] == `OBUFS4_2_HEAD);
-wire sbuf_s5_2_dec = (ibus_radr[15:9] == `OBUFS5_2_HEAD);
-wire sbuf_s0_3_dec = (ibus_radr[15:9] == `OBUFS0_3_HEAD);
-wire sbuf_s1_3_dec = (ibus_radr[15:9] == `OBUFS1_3_HEAD);
-wire sbuf_s2_3_dec = (ibus_radr[15:9] == `OBUFS2_3_HEAD);
-wire sbuf_s3_3_dec = (ibus_radr[15:9] == `OBUFS3_3_HEAD);
-wire sbuf_s4_3_dec = (ibus_radr[15:9] == `OBUFS4_3_HEAD);
-wire sbuf_s5_3_dec = (ibus_radr[15:9] == `OBUFS5_3_HEAD);
-wire sbuf_s0_4_dec = (ibus_radr[15:9] == `OBUFS0_4_HEAD);
-wire sbuf_s1_4_dec = (ibus_radr[15:9] == `OBUFS1_4_HEAD);
-wire sbuf_s2_4_dec = (ibus_radr[15:9] == `OBUFS2_4_HEAD);
-wire sbuf_s3_4_dec = (ibus_radr[15:9] == `OBUFS3_4_HEAD);
-wire sbuf_s4_4_dec = (ibus_radr[15:9] == `OBUFS4_4_HEAD);
-wire sbuf_s5_4_dec = (ibus_radr[15:9] == `OBUFS5_4_HEAD);
-wire sbuf_s0_5_dec = (ibus_radr[15:9] == `OBUFS0_5_HEAD);
-wire sbuf_s1_5_dec = (ibus_radr[15:9] == `OBUFS1_5_HEAD);
-wire sbuf_s2_5_dec = (ibus_radr[15:9] == `OBUFS2_5_HEAD);
-wire sbuf_s3_5_dec = (ibus_radr[15:9] == `OBUFS3_5_HEAD);
-wire sbuf_s4_5_dec = (ibus_radr[15:9] == `OBUFS4_5_HEAD);
-wire sbuf_s5_5_dec = (ibus_radr[15:9] == `OBUFS5_5_HEAD);
+wire sbuf_s0_0_dec = (ibus_radr[15:11] == `OBUFS0_0_HEAD);
+wire sbuf_s1_0_dec = (ibus_radr[15:11] == `OBUFS1_0_HEAD);
+wire sbuf_s2_0_dec = (ibus_radr[15:11] == `OBUFS2_0_HEAD);
+wire sbuf_s3_0_dec = (ibus_radr[15:11] == `OBUFS3_0_HEAD);
+wire sbuf_s4_0_dec = (ibus_radr[15:11] == `OBUFS4_0_HEAD);
+wire sbuf_s5_0_dec = (ibus_radr[15:11] == `OBUFS5_0_HEAD);
+wire sbuf_s0_1_dec = (ibus_radr[15:11] == `OBUFS0_1_HEAD);
+wire sbuf_s1_1_dec = (ibus_radr[15:11] == `OBUFS1_1_HEAD);
+wire sbuf_s2_1_dec = (ibus_radr[15:11] == `OBUFS2_1_HEAD);
+wire sbuf_s3_1_dec = (ibus_radr[15:11] == `OBUFS3_1_HEAD);
+wire sbuf_s4_1_dec = (ibus_radr[15:11] == `OBUFS4_1_HEAD);
+wire sbuf_s5_1_dec = (ibus_radr[15:11] == `OBUFS5_1_HEAD);
+wire sbuf_s0_2_dec = (ibus_radr[15:11] == `OBUFS0_2_HEAD);
+wire sbuf_s1_2_dec = (ibus_radr[15:11] == `OBUFS1_2_HEAD);
+wire sbuf_s2_2_dec = (ibus_radr[15:11] == `OBUFS2_2_HEAD);
+wire sbuf_s3_2_dec = (ibus_radr[15:11] == `OBUFS3_2_HEAD);
+wire sbuf_s4_2_dec = (ibus_radr[15:11] == `OBUFS4_2_HEAD);
+wire sbuf_s5_2_dec = (ibus_radr[15:11] == `OBUFS5_2_HEAD);
+wire sbuf_s0_3_dec = (ibus_radr[15:11] == `OBUFS0_3_HEAD);
+wire sbuf_s1_3_dec = (ibus_radr[15:11] == `OBUFS1_3_HEAD);
+wire sbuf_s2_3_dec = (ibus_radr[15:11] == `OBUFS2_3_HEAD);
+wire sbuf_s3_3_dec = (ibus_radr[15:11] == `OBUFS3_3_HEAD);
+wire sbuf_s4_3_dec = (ibus_radr[15:11] == `OBUFS4_3_HEAD);
+wire sbuf_s5_3_dec = (ibus_radr[15:11] == `OBUFS5_3_HEAD);
+wire sbuf_s0_4_dec = (ibus_radr[15:11] == `OBUFS0_4_HEAD);
+wire sbuf_s1_4_dec = (ibus_radr[15:11] == `OBUFS1_4_HEAD);
+wire sbuf_s2_4_dec = (ibus_radr[15:11] == `OBUFS2_4_HEAD);
+wire sbuf_s3_4_dec = (ibus_radr[15:11] == `OBUFS3_4_HEAD);
+wire sbuf_s4_4_dec = (ibus_radr[15:11] == `OBUFS4_4_HEAD);
+wire sbuf_s5_4_dec = (ibus_radr[15:11] == `OBUFS5_4_HEAD);
+wire sbuf_s0_5_dec = (ibus_radr[15:11] == `OBUFS0_5_HEAD);
+wire sbuf_s1_5_dec = (ibus_radr[15:11] == `OBUFS1_5_HEAD);
+wire sbuf_s2_5_dec = (ibus_radr[15:11] == `OBUFS2_5_HEAD);
+wire sbuf_s3_5_dec = (ibus_radr[15:11] == `OBUFS3_5_HEAD);
+wire sbuf_s4_5_dec = (ibus_radr[15:11] == `OBUFS4_5_HEAD);
+wire sbuf_s5_5_dec = (ibus_radr[15:11] == `OBUFS5_5_HEAD);
 reg sbuf_s0_0_dec_l1;
 reg sbuf_s0_0_dec_l2;
 
@@ -1395,7 +1568,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		sbus_rdata5_5_lat <= sbus_rdata5_5;
 end
-reg a_in0_lat;
+reg [15:0] a_in0_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1403,7 +1576,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		a_in0_lat <= a_in0;
 end
-reg a_in1_lat;
+reg [15:0] a_in1_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1411,7 +1584,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		a_in1_lat <= a_in1;
 end
-reg a_in2_lat;
+reg [15:0] a_in2_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1419,7 +1592,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		a_in2_lat <= a_in2;
 end
-reg a_in3_lat;
+reg [15:0] a_in3_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1427,7 +1600,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		a_in3_lat <= a_in3;
 end
-reg a_in4_lat;
+reg [15:0] a_in4_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1435,7 +1608,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		a_in4_lat <= a_in4;
 end
-reg a_in5_lat;
+reg [15:0] a_in5_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1443,7 +1616,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		a_in5_lat <= a_in5;
 end
-reg b_in0_lat;
+reg [15:0] b_in0_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1451,7 +1624,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		b_in0_lat <= b_in0;
 end
-reg b_in1_lat;
+reg [15:0] b_in1_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1459,7 +1632,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		b_in1_lat <= b_in1;
 end
-reg b_in2_lat;
+reg [15:0] b_in2_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1467,7 +1640,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		b_in2_lat <= b_in2;
 end
-reg b_in3_lat;
+reg [15:0] b_in3_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1475,7 +1648,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		b_in3_lat <= b_in3;
 end
-reg b_in4_lat;
+reg [15:0] b_in4_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1483,7 +1656,7 @@ always @ (posedge clk or negedge rst_n) begin
 	else
 		b_in4_lat <= b_in4;
 end
-reg b_in5_lat;
+reg [15:0] b_in5_lat;
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -1529,19 +1702,19 @@ assign ibus_rdata = sbuf_s0_0_dec_l2 ? sbus_rdata0_0_lat :
 					sbuf_s3_5_dec_l2 ? sbus_rdata3_5_lat :
 					sbuf_s4_5_dec_l2 ? sbus_rdata4_5_lat :
 					sbuf_s5_5_dec_l2 ? sbus_rdata5_5_lat :
-					ibuf_a0_dec ? a_in0_lat :
-					ibuf_a1_dec ? a_in1_lat :
-					ibuf_a2_dec ? a_in2_lat :
-					ibuf_a3_dec ? a_in3_lat :
-					ibuf_a4_dec ? a_in4_lat :
-					ibuf_a5_dec ? a_in5_lat :
-					ibuf_b0_dec ? b_in0_lat :
-					ibuf_b1_dec ? b_in1_lat :
-					ibuf_b2_dec ? b_in2_lat :
-					ibuf_b3_dec ? b_in3_lat :
-					ibuf_b4_dec ? b_in4_lat :
-					ibuf_b5_dec ? b_in5_lat :
-					status_read_en ? { 15'd0, run_status} : 16'd0;
+					ibuf_a0_ren_l2 ? a_in0_lat :
+					ibuf_a1_ren_l2 ? a_in1_lat :
+					ibuf_a2_ren_l2 ? a_in2_lat :
+					ibuf_a3_ren_l2 ? a_in3_lat :
+					ibuf_a4_ren_l2 ? a_in4_lat :
+					ibuf_a5_ren_l2 ? a_in5_lat :
+					ibuf_b0_ren_l2 ? b_in0_lat :
+					ibuf_b1_ren_l2 ? b_in1_lat :
+					ibuf_b2_ren_l2 ? b_in2_lat :
+					ibuf_b3_ren_l2 ? b_in3_lat :
+					ibuf_b4_ren_l2 ? b_in4_lat :
+					ibuf_b5_ren_l2 ? b_in5_lat :
+					16'd0;
 wire finish0_0;
 wire finish1_0;
 wire finish2_0;
