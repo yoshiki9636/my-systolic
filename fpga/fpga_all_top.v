@@ -8,8 +8,8 @@
  * @version		0.1
  */
 
-//;`define TANG_PRIMER
-`define ARTY_A7
+`define TANG_PRIMER
+//`define ARTY_A7
 
 module fpga_all_top(
 	input clkin,
@@ -122,7 +122,7 @@ cpu_top cpu_top (
 	.interrupt_0(interrupt_0)
 	);
 
-systolic36 systolic (
+systolic4 systolic (
 	.clk(clk),
 	.rst_n(rst_n),
 	.dma_io_we(dma_io_we),
