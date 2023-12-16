@@ -46,7 +46,10 @@ with open(outfilename, "w") as f1:
 		for k in range(xi):
 			for j in range(xi):
 				for i in range(matsize):
-					f1.write("{0:08x}\n".format(l1[j+l*xi,i]))
+					value = l1[j+l*xi,i]
+					if (value < 0):
+						value += 0x10000
+					f1.write("{0:08x}\n".format(value))
 				#f1.write("\n")
 	
 		for i in range(rest):
@@ -58,7 +61,10 @@ with open(outfilename, "w") as f1:
 		for k in range(xi):
 			for j in range(xi):
 				for i in range(matsize):
-					f1.write("{0:08x}\n".format(l2[i,k+l*xi]))
+					value = l2[i,k+l*xi]
+					if (value < 0):
+						value += 0x10000
+					f1.write("{0:08x}\n".format(value))
 				#f1.write("\n")
 	
 		for i in range(rest):
@@ -71,7 +77,10 @@ with open(outfilename, "w") as f1:
 		for k in range(xi):
 			for j in range(syssize):
 				for i in range(syssize):
-					f1.write("{0:08x}\n".format(l3[i+syssize*l,j+syssize*k]))
+					value = l3[i+syssize*l,j+syssize*k]
+					if (value < 0):
+						value += 0x10000
+					f1.write("{0:08x}\n".format(value))
 
 
 
