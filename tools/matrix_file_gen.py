@@ -22,6 +22,11 @@ l3 = l1 * l2
 print(l1)
 print(l2)
 print(l3)
+for j in range(6):
+	for i in range(6):
+		k = l3[i,j]
+		k = k + 0x1000 if k<0 else k
+		print("{0:04x}".format(k))
 
 matsize = l1.shape[0]
 xi = int(l1.shape[0] / syssize)
@@ -50,11 +55,11 @@ with open(outfilename, "w") as f1:
 					if (value < 0):
 						value += 0x10000
 					f1.write("{0:08x}\n".format(value))
-				#f1.write("\n")
+				f1.write("\n")
 	
 		for i in range(rest):
 			f1.write("00000000\n")
-		#f1.write("\n")
+		f1.write("\n")
 	
 	# mat2
 	for l in range(syssize):
@@ -65,19 +70,19 @@ with open(outfilename, "w") as f1:
 					if (value < 0):
 						value += 0x10000
 					f1.write("{0:08x}\n".format(value))
-				#f1.write("\n")
+				f1.write("\n")
 	
 		for i in range(rest):
 			f1.write("00000000\n")
-		#f1.write("\n")
+		f1.write("\n")
 	
 	# mat3
 
-	for l in range(yi):
-		for k in range(xi):
-			for j in range(syssize):
-				for i in range(syssize):
-					value = l3[i+syssize*l,j+syssize*k]
+	for l in range(syssize):
+		for k in range(syssize):
+			for j in range(yi):
+				for i in range(xi):
+					value = l3[i+xi*l,j+yi*k]
 					if (value < 0):
 						value += 0x10000
 					f1.write("{0:08x}\n".format(value))
