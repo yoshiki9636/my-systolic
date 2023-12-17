@@ -115,6 +115,7 @@ My Systolic array with My RISC-V RV32I CPU ( from anotehr repository )
  ・tools/getiobuf.pl n > file でiobuf.v相当のファイルを作成します。
 
 
+---------
 @auther		Yoshiki Kurokawa <yoshiki.k963@gmail.com>  
 @copylight	2023 Yoshiki Kurokawa  
 @license	https://opensource.org/licenses/MIT     MIT license  
