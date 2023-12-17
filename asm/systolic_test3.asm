@@ -33,7 +33,7 @@ addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA data counter
 and x4, x0, x0 ; clear : start 0
-ori x4, x4, 0x10 ; DMA data counter
+ori x4, x4, 0x35 ; DMA data counter
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfcc ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -57,13 +57,13 @@ addi x3, x3, 0xfc4 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-ori x4, x4, 0x80 ; memory start 0
+ori x4, x4, 0x100 ; memory start 0
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA data counter
 and x4, x0, x0 ; clear : start 0
-ori x4, x4, 0x10 ; DMA data counter
+ori x4, x4, 0x35 ; DMA data counter
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfcc ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -87,13 +87,13 @@ addi x3, x3, 0xfc4 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-ori x4, x4, 0x100 ; memory start 0
+ori x4, x4, 0x200 ; memory start 0
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA data counter
 and x4, x0, x0 ; clear : start 0
-ori x4, x4, 0x10 ; DMA data counter
+ori x4, x4, 0x35 ; DMA data counter
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfcc ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -117,13 +117,13 @@ addi x3, x3, 0xfc4 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-ori x4, x4, 0x180 ; memory start 0
+ori x4, x4, 0x300 ; memory start 0
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA data counter
 and x4, x0, x0 ; clear : start 0
-ori x4, x4, 0x10 ; DMA data counter
+ori x4, x4, 0x35 ; DMA data counter
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfcc ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -148,11 +148,11 @@ nop
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfe4 ;
 and x4, x0, x0 ; clear : start 0
-ori x4, x4, 0x3 ; systolic max cntr
+ori x4, x4, 0x5 ; systolic max cntr
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-ori x4, x4, 0x3 ; systolic run cntr
+ori x4, x4, 0x8 ; systolic run cntr
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfe8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -163,6 +163,14 @@ lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfe0 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; wait finish
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
 :label_read_loop0
 lh x5, 0x0(x3) ; set IO start adr offset 0x4
 beq x5, x4, label_read_loop0
@@ -181,13 +189,13 @@ ori x4, x4, 0x0 ; memory start 0
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-addi x4, x4, 0x300 ; memory start 0
+addi x4, x4, 0x600 ; memory start 0
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA data counter
 and x4, x0, x0 ; clear : start 0
-ori x4, x4, 0x3 ; DMA data counter
+ori x4, x4, 0x9 ; DMA data counter
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfcc ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -211,7 +219,7 @@ addi x4, x4, 0x400 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-addi x4, x4, 0x380 ; memory start 0
+addi x4, x4, 0x680 ; memory start 0
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -241,13 +249,13 @@ addi x4, x4, 0x800 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-addi x4, x4, 0x310 ; memory start 0
+addi x4, x4, 0x624 ; memory start 0
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA data counter
 and x4, x0, x0 ; clear : start 0
-addi x4, x4, 0x3 ; DMA data counter
+addi x4, x4, 0x9 ; DMA data counter
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfcc ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -271,7 +279,7 @@ addi x4, x4, 0xc00 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-addi x4, x4, 0x390 ; memory start 0
+addi x4, x4, 0x690 ; memory start 0
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -301,13 +309,13 @@ addi x4, x4, 0x0 ; memory start 0
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-addi x4, x4, 0x320 ; memory start 0
+addi x4, x4, 0x648 ; memory start 0
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA data counter
 and x4, x0, x0 ; clear : start 0
-addi x4, x4, 0x3 ; DMA data counter
+addi x4, x4, 0x9 ; DMA data counter
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfcc ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -331,7 +339,7 @@ addi x4, x4, 0x400 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-ori x4, x4, 0x3a0 ; memory start 0
+ori x4, x4, 0x6a0 ; memory start 0
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -361,13 +369,13 @@ addi x4, x4, 0x800 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-addi x4, x4, 0x330 ; memory start 0
+addi x4, x4, 0x66c ; memory start 0
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA data counter
 and x4, x0, x0 ; clear : start 0
-addi x4, x4, 0x3 ; DMA data counter
+addi x4, x4, 0x9 ; DMA data counter
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfcc ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -391,7 +399,7 @@ addi x4, x4, 0xc00 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
 ; DMA mem start adr
 and x4, x0, x0 ; clear : start 0
-addi x4, x4, 0x3b0 ; memory start 0
+addi x4, x4, 0x6b0 ; memory start 0
 lui x3, 0xc0010 ; DMA base address +1
 addi x3, x3, 0xfc8 ;
 sh x4, 0x0(x3) ; set IO start adr offset 0x4
@@ -417,11 +425,11 @@ beq x5, x4, label_read_loop8
 ; calculated data address 0x300
 ; loop 16
 and x3, x0, x0 ; clear : start 0
-addi x3, x3, 0x200 ;
+addi x3, x3, 0x400 ;
 and x4, x0, x0 ; clear : start 0
-addi x4, x4, 0x300 ;
+addi x4, x4, 0x600 ;
 and x5, x0, x0 ; clear : start 0
-addi x5, x5, 0x10 ;
+addi x5, x5, 0x34 ;
 :label_check_loop
 lh x6, 0x0(x3) ; set IO start adr offset 0x4
 lh x7, 0x0(x4) ; set IO start adr offset 0x4
