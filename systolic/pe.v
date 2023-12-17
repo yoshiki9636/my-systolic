@@ -56,6 +56,7 @@ dsp dsp (
 	.ben(aben_int),
 	.men(men),
 	.sen(sen),
+	.start(start),
 	.sreset(sreset),
 	.sat(sat),
 	.s_out(s_out)
@@ -73,6 +74,7 @@ fifo afifo (
 	.is(ais),
 	.rv(arv),
 	.ff(aff),
+	.start(start),
 	.din(a_in),
 	.dout(a_value)
 	);
@@ -88,6 +90,7 @@ fifo bfifo (
 	.is(bis),
 	.rv(brv),
 	.ff(bff),
+	.start(start),
 	.din(b_in),
 	.dout(b_value)
 	);

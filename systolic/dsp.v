@@ -17,6 +17,7 @@ module dsp(
 	input ben,
 	input men,
 	input sen,
+	input start,
 	input sreset,
 	output reg sat,
 	output reg [15:0] s_out
@@ -82,23 +83,14 @@ wire signed [31:0] s_p2 = $signed( overflow32  ? 32'h7fff_ffff :
                                     underflow16 ? 32'h8000_0000 : s_pre[31:0] );
 
 // last FF
-//reg sat_p;
-//reg signed [15:0] s_out_p;
-
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n) begin
-        //sat_p <= 1'b0;
-        //s_out_p <= $signed(16'd0);
         s_int <= $signed(32'd0);
 	end
-	else if (sreset) begin
-        //sat_p <= 1'b0;
-        //s_out_p <= $signed(16'd0);
+	else if (sreset|start) begin
         s_int <= $signed(32'd0);
 	end
 	else if (sen) begin
-        //sat_p <= sat_int;
-        //s_out_p <= s_out_int;
 		s_int <= s_p2;
 	end
 end

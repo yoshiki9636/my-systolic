@@ -17,6 +17,7 @@ module fifo(
 	//output reg rv,
 	output rv,
 	output ff,
+	input start,
 	input [15:0] din,
 	output [15:0] dout
 	);
@@ -29,6 +30,8 @@ wire rnext;
 
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
+        en_cntr <= 2'd0;
+    else if (start)
         en_cntr <= 2'd0;
     else if (~is & we & rv_pre & re)
         en_cntr <= en_cntr;
@@ -75,6 +78,8 @@ reg [1:0] wadr;
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
         wadr <= 2'd0;
+    else if (start)
+        wadr <= 2'd0;
     else if (we & ((~is & ~ff) | is_1shot | ff_1shot))
         wadr <= wadr + 2'd1;
 end
@@ -84,6 +89,8 @@ reg [1:0] radr;
 
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
+        radr <= 2'd0;
+    else if (start)
         radr <= 2'd0;
     else if (~is & rv_pre & re)
         radr <= radr + 2'd1;
