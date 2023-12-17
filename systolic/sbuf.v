@@ -29,6 +29,7 @@ module sbuf (
 	);
 
 // running counter
+wire s_running_pre;
 reg [7:0] run_s_cntr;
 
 always @ (posedge clk or negedge rst_n) begin
@@ -41,17 +42,19 @@ always @ (posedge clk or negedge rst_n) begin
 end
 
 
-assign s_running = |run_s_cntr;
+assign s_running_pre = |run_s_cntr;
 reg s_running_d1;
 
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
         s_running_d1 <= 1'b0;
 	else
-        s_running_d1 <= s_running;
+        s_running_d1 <= s_running_pre;
 end
 
-assign finish = ~s_running & s_running_d1;
+assign s_running = s_running_pre | s_running_d1;
+//assign finish = ~s_running & s_running_d1;
+assign finish = (run_s_cntr == 8'd0) & sw;
 
 // outbuffer controls
 // read part

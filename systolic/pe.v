@@ -42,6 +42,7 @@ reg sreset;
 // dsp block
 reg aen_int;
 reg ben_int;
+reg aben_int;
 
 //(*keep_hierarchy="yes"*)dsp dsp (
 dsp dsp (
@@ -49,8 +50,10 @@ dsp dsp (
 	.rst_n(rst_n),
 	.a_value(a_value),
 	.b_value(b_value),
-	.aen(aen_int),
-	.ben(ben_int),
+	//.aen(aen_int),
+	//.ben(ben_int),
+	.aen(aben_int),
+	.ben(aben_int),
 	.men(men),
 	.sen(sen),
 	.sreset(sreset),
@@ -60,12 +63,13 @@ dsp dsp (
 
 // afifo module
 wire arv;
+wire aben;
 
 fifo afifo (
 	.clk(clk),
 	.rst_n(rst_n),
 	.we(awe),
-	.re(ben),
+	.re(aben),
 	.is(ais),
 	.rv(arv),
 	.ff(aff),
@@ -80,7 +84,7 @@ fifo bfifo (
 	.clk(clk),
 	.rst_n(rst_n),
 	.we(bwe),
-	.re(aen),
+	.re(aben),
 	.is(bis),
 	.rv(brv),
 	.ff(bff),
@@ -101,15 +105,37 @@ always @ (posedge clk or negedge rst_n) begin
 end
 
 // control singals
+reg aben_post;
 reg aen_post;
 reg ben_post;
 
-assign men = aen_post & ben_post & ~ais & ~bis;
+assign aben = aen & ben;
+//assign men = aen_post & ben_post & ~ais & ~bis;
+//assign men = aben_post & ~ais & ~bis;
+assign men = aben_post;
 assign fout = men;
 assign sreset_pre = men & ~(|aoffset_cntr) ;
 
-assign aen = arv & ~ais & ~bis;
-assign ben = brv & ~ais & ~bis;
+//assign aen = arv & ~ais & ~bis;
+//assign ben = brv & ~ais & ~bis;
+assign aen = arv;
+assign ben = brv;
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+        aben_int <= 1'b0;
+	else if (~ais & ~bis)
+        aben_int <= aben;
+end
+
+always @ (posedge clk or negedge rst_n) begin
+	if (~rst_n)
+        aben_post <= 1'b0;
+	//else if (~ais & ~bis)
+        //aben_post <= aben_int;
+	else
+        aben_post <= aben_int &  (~ais & ~bis);
+end
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
@@ -190,14 +216,14 @@ end
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
         a_out <= $signed(16'd0);
-	else if (aen)
+	else if (aben)
         a_out <= a_value;
 end
 
 always @ (posedge clk or negedge rst_n) begin
 	if (~rst_n)
         b_out <= $signed(16'd0);
-	else if (ben)
+	else if (aben)
         b_out <= b_value;
 end
 
