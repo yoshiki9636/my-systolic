@@ -9,10 +9,15 @@ My Systolic array with My RISC-V RV32I CPU ( from anotehr repository )
 
 # 仕様
 ・16bitシストリックアレイ演算器　コードジェネレータによりアレイ部分の大きさは可変（8x8の64演算器まで生成実験しましたがタイミングがだんだん厳しくなります）
+
 ・16bit x 16bit ⇒ 32bitでの内部加算をして、総和結果を16bitに絞って出力。この際オーバーフロー／アンダーブローは飽和処理をする。
+
 ・飽和フラッグを各乗算に対して１ビットずつ別途出力
+
 ・16bit read/write I/Oバス I/F
+
 ・Arty A7 35Tで、75MHzで動作実績
+
 # 制約
 ・Gather/Scatter機能は無し。部分行列を自力で読み出し、自分で並べ替える必要あり
 
