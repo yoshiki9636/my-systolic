@@ -116,7 +116,9 @@ If you type g00000000, the test program will run. if L-tika starts, the test has
 
  Create a file equivalent to iobuf.v with tools/getiobuf.pl n > file.
 
-------
+
+-----------
+
 ### Japanese
 
 　シストリックアレイ( Systolic array )とは、行列乗算を効率的に行うための演算器アレイです。乗算加算器を縦横に並べてデータを順番に食わせることによって乗算に必要な乗算加算の組み合わせをすべて計算してくれます。例えばGoogle TPUなどはディープラーニング推論向けにシストリックアレイを搭載しております。今回はAMD製Arty A7での動作を目標に、16bit整数シストリックアレイの模型を実験できるようにverilogコードを作成しました。模型なのでまだまだ制約はありますが、手元のArty A7 T35で6x6のシストリックアレイの動作を確認できております。ただし、演算器はverilogで書いてあるため、ほかのFPGAへもポーティングは可能と考えられます。
