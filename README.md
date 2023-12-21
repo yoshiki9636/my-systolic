@@ -2,7 +2,122 @@
 
 My Systolic array with My RISC-V RV32I CPU ( from anotehr repository )
 16bit Integer SYstolic array for matrix multiplier
-(Currently Japanese document only)
+(Japanese Follows English)
+
+### English
+
+　Systolic arrays are arrays of arithmetic units used to efficiently perform matrix multiplication. By arranging multiply-adders vertically and horizontally and feeding them data in sequence, it calculates all the necessary multiply-add combinations for multiplication. Google TPU, for example, has a systolic array for deep learning inference. We have created verilog code to experiment with a model of a 16-bit integer systolic array, with the goal of running on AMD's Arty A7. Although there are still some limitations since it is a model, we have confirmed the operation of a 6x6 systolic array on an Arty A7 T35 at hand. However, since the arithmetic unit is written in verilog, porting to other FPGAs is also possible.
+　The code in this repository is not stand-alone, but has an I/F with a simple DMA IO bus to connect and operate with the CPU of [my-riscv-rv32i](https://github.com/yoshiki9636/my-riscv-rv32i). In the experiment, my-riscv-rv32i will also be used together. The following usage procedure is also based on the assumption that the two devices will be used together.
+
+# Specifications
+16-bit systolic array operator The size of the array portion can be varied by the code generator (we have experimented with generating up to 64 8x8 operators, but the timing is getting tougher and tougher).
+
+16bit x 16bit ⇒ Internal addition at 32bit is performed and the summed result is reduced to 16bit for output. In this case, overflow/underblow is saturated.
+
+Output saturation flags separately, one bit for each multiplication
+
+16bit read/write I/O bus I/F
+
+Arty A7 35T, operating at 75MHz
+
+# Constraints
+No Gather/Scatter function. Need to read out the submatrix by yourself and rearrange it by yourself.
+
+# Usage
+## RTL simulation (using default 2x2)
+Clone this repository and [my-riscv-rv32i](https://github.com/yoshiki9636/my-riscv-rv32i).
+
+. Create the /fsim directory and copy the following files
+ ... rtls
+ 
+  my-systolic/systolic/*.v
+  
+  my-systolic/fpga/fpga_all_top.v
+  
+  my-systolic/sim/fullsimtop.v
+  
+  my-riscv-rv32i/cpu/*.v
+  
+  my-riscv-rv32i/io/*.v
+  
+  my-riscv-rv32i/mon/*.v
+  
+  my-riscv-rv32i/sim/pll_sim.v
+
+Open fpga_all_top.v and change define to TANG_PRIMER
+
+Enter my-systolic/asm and execute the following
+  $ ./riscv-asm1.pl systolic_test4.asm > ../fsim/test.txt
+
+Enter my-systolic/fsim and execute the following
+  $ python3 ../tools/matrix_file_gen.py 64 2 a2.csv b2.csv c2.txt
+  $ ../tools/split.pl c2.txt
+
+Now you have all the files you need to run the simulation in fsim. Please run the simulation on your RTL simulator. The author uses Modelsim, a free version provided by intel.
+
+## Synthesis (Arty A7)
+Use the files in the above fsim/ directory except fulsimtop.v and pll_sim.v.
+
+∙ Set the frequency option in fsim/uart_if.v to 75 MHz.
+
+Launch vivado and specify the above file and syn/riscv_io_pins.xdc as timing.
+
+Instance the PLL at 75MHz before synthesis.
+
+The rest is done by Composite => Implement => Create Bitstream => Upload Bitstream.
+
+## Actual operation
+The test.txt and c2.txt files used in the simulation will be the executable code and data pattern files. If not, please create them according to the above.
+
+Start up "teratarm" and start up the serial terminal. Set terminal => Newline code Receive: AUTO, Serial port: 9600bps, 8bit, none, 1bit, none.
+
+. When you hit q, an echo-back q will be returned. Please refer to [my-riscv-rv32i/README-md](https://github.com/yoshiki9636/my-riscv-rv32i) for detailed usage of the monitor.
+
+Type i00000000.
+
+In File⇒File Transfer, specify the above test.txt file.
+
+I'll type q.
+
+I'll type w00000000.
+
+In File⇒File Transfer, specify the above c2.txt file.
+
+I'll type q.
+
+If you type g00000000, the test program will run. if L-tika starts, the test has passed. If the white LED remains lit, the test has failed.
+
+ The above test program does the following
+ 
+  Writes the first row data of matrix A to IO DMA
+
+  Writes the second row data of matrix A to IO DMA
+
+  Writes IO DMA to the first row data of matrix B
+
+  Writes the second row data of matrix B to IO DMA
+  
+  We will start a systolic array.
+  
+  Repeat three times (to make sure it works at least twice)
+  
+  IO DMA reads part 1 of the result matrix
+  
+  IO DMA reads part 2 of the result matrix
+  
+  IO DMA reads part 3 of the result matrix
+  
+  IO DMA reads part 4 of the result matrix
+  
+  Compare the readout results with the predefined results, and if they all match, jump to L-Thica.
+
+## How to create NxN extended version
+　Create a file equivalent to systolic4.v with tools/gettop.pl n > file.
+
+ Create a file equivalent to iobuf.v with tools/getiobuf.pl n > file.
+
+
+### Japanese
 
 　シストリックアレイ( Systolic array )とは、行列乗算を効率的に行うための演算器アレイです。乗算加算器を縦横に並べてデータを順番に食わせることによって乗算に必要な乗算加算の組み合わせをすべて計算してくれます。例えばGoogle TPUなどはディープラーニング推論向けにシストリックアレイを搭載しております。今回はAMD製Arty A7での動作を目標に、16bit整数シストリックアレイの模型を実験できるようにverilogコードを作成しました。模型なのでまだまだ制約はありますが、手元のArty A7 T35で6x6のシストリックアレイの動作を確認できております。ただし、演算器はverilogで書いてあるため、ほかのFPGAへもポーティングは可能と考えられます。
 　本レポジトリのコードは単体ではなく、[my-riscv-rv32i](https://github.com/yoshiki9636/my-riscv-rv32i)のCPUと接続して動作するように簡易的なDMA　IOバスでのI/Fを付けております。実験の際は、my-riscv-rv32iも併せての使用となります。以下の使用手順も併用を前提としております。
