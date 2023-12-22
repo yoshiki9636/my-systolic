@@ -22,11 +22,6 @@ l3 = l1 * l2
 print(l1)
 print(l2)
 print(l3)
-for j in range(6):
-	for i in range(6):
-		k = l3[i,j]
-		k = k + 0x1000 if k<0 else k
-		#print("{0:04x}".format(k))
 
 matsize = l1.shape[0]
 xi = int(l1.shape[0] / syssize)
@@ -56,7 +51,7 @@ for i in range(4):
 
 max_cntr = matsize - 1
 print("#immdefine imm_max_cntr 0x{0:03x}".format(max_cntr))
-run_cntr = itter_size * itter_size - 1
+run_cntr = itter_size * itter_size
 print("#immdefine imm_run_cntr 0x{0:03x}".format(run_cntr))
 
 print("#immdefine imm_answer_start 0x{0:03x}".format(mem_start))
