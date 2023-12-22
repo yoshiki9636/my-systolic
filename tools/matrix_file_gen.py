@@ -66,11 +66,11 @@ dc_s_2 = int(dc_s / 16)
 dc_s_2 += 1 if (dc_s_2 == 0) else 0
 print("#immdefine imm_dma_dc_s_2 0x{0:03x}".format(dc_s_2))
 
-for i in range(2*syssize):
+for i in range(syssize*syssize):
 	print("#immdefine imm_mem_start_s{0} 0x{1:03x}".format(i,mem_start))
 	mem_start += dc_s * 4
 
-for i in range(2*syssize):
+for i in range(syssize*syssize):
 	print("#immdefine imm_mem_start_s{0}s 0x{1:03x}".format(i,mem_start))
 	mem_start += 8 if dc_s_2 == 1 else dc_s_2
 
