@@ -15,16 +15,16 @@ module systolic16(
 	// io register interface
 	input dma_io_we,
 	input [15:2] dma_io_wadr,
-	input [15:0] dma_io_wdata,
+	input [31:0] dma_io_wdata,
 	input [15:2] dma_io_radr,
-	input [15:0] dma_io_rdata_in,
-	output [15:0] dma_io_rdata,
+	input [31:0] dma_io_rdata_in,
+	output [31:0] dma_io_rdata,
 	// buffers ram interface
 	input ibus_ren,
-	input [15:2] ibus_radr,
+	input [19:2] ibus_radr,
 	output [15:0] ibus_rdata,
 	input ibus_wen,
-	input [15:2] ibus_wadr,
+	input [19:2] ibus_wadr,
 	input [15:0] ibus_wdata
 
 	);

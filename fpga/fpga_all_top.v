@@ -8,8 +8,8 @@
  * @version		0.1
  */
 
-`define TANG_PRIMER
-//`define ARTY_A7
+//`define TANG_PRIMER
+`define ARTY_A7
 
 module fpga_all_top(
 	input clkin,
@@ -37,16 +37,16 @@ wire i_read_sel;
 
 wire dma_io_we;
 wire [15:2] dma_io_wadr;
-wire [15:0] dma_io_wdata;
+wire [31:0] dma_io_wdata;
 wire [15:2] dma_io_radr;
-wire [15:0] dma_io_rdata;
-wire [15:0] dma_io_rdata_in = 16'd0;
-wire [15:0] dma_io_rdata_io;
+wire [31:0] dma_io_rdata;
+wire [31:0] dma_io_rdata_in = 32'd0;
+wire [31:0] dma_io_rdata_io;
 wire ibus_ren;
-wire [15:2] ibus_radr;
+wire [19:2] ibus_radr;
 wire [15:0] ibus32_rdata;
 wire ibus_wen;
-wire [15:2] ibus_wadr;
+wire [19:2] ibus_wadr;
 wire [15:0] ibus32_wdata;
 
 wire [31:2] start_adr;
@@ -122,7 +122,7 @@ cpu_top cpu_top (
 	.interrupt_0(interrupt_0)
 	);
 
-systolic4 systolic (
+systolic16 systolic (
 	.clk(clk),
 	.rst_n(rst_n),
 	.dma_io_we(dma_io_we),

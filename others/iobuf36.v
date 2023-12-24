@@ -14,16 +14,16 @@ module iobuf(
 
 	input dma_io_we,
 	input [15:2] dma_io_wadr,
-	input [15:0] dma_io_wdata,
+	input [31:0] dma_io_wdata,
 	input [15:2] dma_io_radr,
-	input [15:0] dma_io_rdata_in,
-	output [15:0] dma_io_rdata,
+	input [31:0] dma_io_rdata_in,
+	output [31:0] dma_io_rdata,
 	// ram interface
 	input ibus_ren,
-	input [15:2] ibus_radr,
+	input [19:2] ibus_radr,
 	output [15:0] ibus_rdata,
 	input ibus_wen,
-	input [15:2] ibus_wadr,
+	input [19:2] ibus_wadr,
 	input [15:0] ibus_wdata,
 
 	// systolice array inbuffer interface
@@ -175,54 +175,54 @@ module iobuf(
 	input sw4_5,
 	input sw5_5
 	);
-`define IBUFA0_HEAD 4'h0
-`define IBUFA1_HEAD 4'h1
-`define IBUFA2_HEAD 4'h2
-`define IBUFA3_HEAD 4'h3
-`define IBUFA4_HEAD 4'h4
-`define IBUFA5_HEAD 4'h5
-`define IBUFB0_HEAD 4'h6
-`define IBUFB1_HEAD 4'h7
-`define IBUFB2_HEAD 4'h8
-`define IBUFB3_HEAD 4'h9
-`define IBUFB4_HEAD 4'h10
-`define IBUFB5_HEAD 4'h11
-`define OBUFS0_0_HEAD 5'h10
-`define OBUFS1_0_HEAD 5'h11
-`define OBUFS2_0_HEAD 5'h12
-`define OBUFS3_0_HEAD 5'h13
-`define OBUFS4_0_HEAD 5'h14
-`define OBUFS5_0_HEAD 5'h15
-`define OBUFS0_1_HEAD 5'h16
-`define OBUFS1_1_HEAD 5'h17
-`define OBUFS2_1_HEAD 5'h18
-`define OBUFS3_1_HEAD 5'h19
-`define OBUFS4_1_HEAD 5'h110
-`define OBUFS5_1_HEAD 5'h111
-`define OBUFS0_2_HEAD 5'h112
-`define OBUFS1_2_HEAD 5'h113
-`define OBUFS2_2_HEAD 5'h114
-`define OBUFS3_2_HEAD 5'h115
-`define OBUFS4_2_HEAD 5'h116
-`define OBUFS5_2_HEAD 5'h117
-`define OBUFS0_3_HEAD 5'h118
-`define OBUFS1_3_HEAD 5'h119
-`define OBUFS2_3_HEAD 5'h120
-`define OBUFS3_3_HEAD 5'h121
-`define OBUFS4_3_HEAD 5'h122
-`define OBUFS5_3_HEAD 5'h123
-`define OBUFS0_4_HEAD 5'h124
-`define OBUFS1_4_HEAD 5'h125
-`define OBUFS2_4_HEAD 5'h126
-`define OBUFS3_4_HEAD 5'h127
-`define OBUFS4_4_HEAD 5'h128
-`define OBUFS5_4_HEAD 5'h129
-`define OBUFS0_5_HEAD 5'h130
-`define OBUFS1_5_HEAD 5'h131
-`define OBUFS2_5_HEAD 5'h132
-`define OBUFS3_5_HEAD 5'h133
-`define OBUFS4_5_HEAD 5'h134
-`define OBUFS5_5_HEAD 5'h135
+`define IBUFA00_HEAD 8'h00
+`define IBUFA01_HEAD 8'h01
+`define IBUFA02_HEAD 8'h02
+`define IBUFA03_HEAD 8'h03
+`define IBUFA04_HEAD 8'h04
+`define IBUFA05_HEAD 8'h05
+`define IBUFB00_HEAD 8'h06
+`define IBUFB01_HEAD 8'h07
+`define IBUFB02_HEAD 8'h08
+`define IBUFB03_HEAD 8'h09
+`define IBUFB04_HEAD 8'h0a
+`define IBUFB05_HEAD 8'h0b
+`define OBUFS00_00_HEAD 8'h00
+`define OBUFS01_00_HEAD 8'h01
+`define OBUFS02_00_HEAD 8'h02
+`define OBUFS03_00_HEAD 8'h03
+`define OBUFS04_00_HEAD 8'h04
+`define OBUFS05_00_HEAD 8'h05
+`define OBUFS00_01_HEAD 8'h06
+`define OBUFS01_01_HEAD 8'h07
+`define OBUFS02_01_HEAD 8'h08
+`define OBUFS03_01_HEAD 8'h09
+`define OBUFS04_01_HEAD 8'h0a
+`define OBUFS05_01_HEAD 8'h0b
+`define OBUFS00_02_HEAD 8'h0c
+`define OBUFS01_02_HEAD 8'h0d
+`define OBUFS02_02_HEAD 8'h0e
+`define OBUFS03_02_HEAD 8'h0f
+`define OBUFS04_02_HEAD 8'h10
+`define OBUFS05_02_HEAD 8'h11
+`define OBUFS00_03_HEAD 8'h12
+`define OBUFS01_03_HEAD 8'h13
+`define OBUFS02_03_HEAD 8'h14
+`define OBUFS03_03_HEAD 8'h15
+`define OBUFS04_03_HEAD 8'h16
+`define OBUFS05_03_HEAD 8'h17
+`define OBUFS00_04_HEAD 8'h18
+`define OBUFS01_04_HEAD 8'h19
+`define OBUFS02_04_HEAD 8'h1a
+`define OBUFS03_04_HEAD 8'h1b
+`define OBUFS04_04_HEAD 8'h1c
+`define OBUFS05_04_HEAD 8'h1d
+`define OBUFS00_05_HEAD 8'h1e
+`define OBUFS01_05_HEAD 8'h1f
+`define OBUFS02_05_HEAD 8'h20
+`define OBUFS03_05_HEAD 8'h21
+`define OBUFS04_05_HEAD 8'h22
+`define OBUFS05_05_HEAD 8'h23
 `define SYS_START_ADR 14'h3FF8
 `define SYS_MAX_CNTR 14'h3FF9
 `define SYS_RUN_CNTR 14'h3FFa
@@ -268,39 +268,39 @@ wire re_run_status = (dma_io_radr == `SYS_START_ADR);
 wire re_run_maxcntr = (dma_io_radr == `SYS_MAX_CNTR);
 wire re_run_runcntr = (dma_io_radr == `SYS_RUN_CNTR);
 
-assign dma_io_rdata = re_run_status ? { 15'd0, run_status } :
-					  re_run_maxcntr ? { 8'd0, max_cntr } :
-					  re_run_runcntr ? { 8'd0, run_cntr } : dma_io_rdata_in;
+assign dma_io_rdata = re_run_status ? { 16'd0, 15'd0, run_status } :
+					  re_run_maxcntr ? { 16'd0, 8'd0, max_cntr } :
+					  re_run_runcntr ? { 16'd0, 8'd0, run_cntr } : dma_io_rdata_in;
 
 // input buffer controls
 // write part
 wire [9:0] abbus_wadr = ibus_wadr[11:2];
-wire ibuf_a0_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA0_HEAD);
-wire ibuf_a1_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA1_HEAD);
-wire ibuf_a2_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA2_HEAD);
-wire ibuf_a3_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA3_HEAD);
-wire ibuf_a4_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA4_HEAD);
-wire ibuf_a5_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA5_HEAD);
-wire ibuf_b0_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB0_HEAD);
-wire ibuf_b1_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB1_HEAD);
-wire ibuf_b2_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB2_HEAD);
-wire ibuf_b3_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB3_HEAD);
-wire ibuf_b4_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB4_HEAD);
-wire ibuf_b5_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB5_HEAD);
+wire ibuf_a0_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFA00_HEAD);
+wire ibuf_a1_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFA01_HEAD);
+wire ibuf_a2_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFA02_HEAD);
+wire ibuf_a3_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFA03_HEAD);
+wire ibuf_a4_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFA04_HEAD);
+wire ibuf_a5_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFA05_HEAD);
+wire ibuf_b0_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFB00_HEAD);
+wire ibuf_b1_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFB01_HEAD);
+wire ibuf_b2_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFB02_HEAD);
+wire ibuf_b3_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFB03_HEAD);
+wire ibuf_b4_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFB04_HEAD);
+wire ibuf_b5_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFB05_HEAD);
 
 wire [9:0] abbus_radr = ibus_radr[11:2];
-wire ibuf_a0_dec = (ibus_radr[15:12] == `IBUFA0_HEAD);
-wire ibuf_a1_dec = (ibus_radr[15:12] == `IBUFA1_HEAD);
-wire ibuf_a2_dec = (ibus_radr[15:12] == `IBUFA2_HEAD);
-wire ibuf_a3_dec = (ibus_radr[15:12] == `IBUFA3_HEAD);
-wire ibuf_a4_dec = (ibus_radr[15:12] == `IBUFA4_HEAD);
-wire ibuf_a5_dec = (ibus_radr[15:12] == `IBUFA5_HEAD);
-wire ibuf_b0_dec = (ibus_radr[15:12] == `IBUFB0_HEAD);
-wire ibuf_b1_dec = (ibus_radr[15:12] == `IBUFB1_HEAD);
-wire ibuf_b2_dec = (ibus_radr[15:12] == `IBUFB2_HEAD);
-wire ibuf_b3_dec = (ibus_radr[15:12] == `IBUFB3_HEAD);
-wire ibuf_b4_dec = (ibus_radr[15:12] == `IBUFB4_HEAD);
-wire ibuf_b5_dec = (ibus_radr[15:12] == `IBUFB5_HEAD);
+wire ibuf_a0_dec = (ibus_radr[19:12] == `IBUFA00_HEAD);
+wire ibuf_a1_dec = (ibus_radr[19:12] == `IBUFA01_HEAD);
+wire ibuf_a2_dec = (ibus_radr[19:12] == `IBUFA02_HEAD);
+wire ibuf_a3_dec = (ibus_radr[19:12] == `IBUFA03_HEAD);
+wire ibuf_a4_dec = (ibus_radr[19:12] == `IBUFA04_HEAD);
+wire ibuf_a5_dec = (ibus_radr[19:12] == `IBUFA05_HEAD);
+wire ibuf_b0_dec = (ibus_radr[19:12] == `IBUFB00_HEAD);
+wire ibuf_b1_dec = (ibus_radr[19:12] == `IBUFB01_HEAD);
+wire ibuf_b2_dec = (ibus_radr[19:12] == `IBUFB02_HEAD);
+wire ibuf_b3_dec = (ibus_radr[19:12] == `IBUFB03_HEAD);
+wire ibuf_b4_dec = (ibus_radr[19:12] == `IBUFB04_HEAD);
+wire ibuf_b5_dec = (ibus_radr[19:12] == `IBUFB05_HEAD);
 wire ibuf_a0_ren = ibus_ren & ibuf_a0_dec;
 wire ibuf_a1_ren = ibus_ren & ibuf_a1_dec;
 wire ibuf_a2_ren = ibus_ren & ibuf_a2_dec;
@@ -704,42 +704,42 @@ abbuf b5buf (
 // read part
 wire [8:0] sbus_radr = ibus_radr[10:2];
 
-wire sbuf_s0_0_dec = (ibus_radr[15:11] == `OBUFS0_0_HEAD);
-wire sbuf_s1_0_dec = (ibus_radr[15:11] == `OBUFS1_0_HEAD);
-wire sbuf_s2_0_dec = (ibus_radr[15:11] == `OBUFS2_0_HEAD);
-wire sbuf_s3_0_dec = (ibus_radr[15:11] == `OBUFS3_0_HEAD);
-wire sbuf_s4_0_dec = (ibus_radr[15:11] == `OBUFS4_0_HEAD);
-wire sbuf_s5_0_dec = (ibus_radr[15:11] == `OBUFS5_0_HEAD);
-wire sbuf_s0_1_dec = (ibus_radr[15:11] == `OBUFS0_1_HEAD);
-wire sbuf_s1_1_dec = (ibus_radr[15:11] == `OBUFS1_1_HEAD);
-wire sbuf_s2_1_dec = (ibus_radr[15:11] == `OBUFS2_1_HEAD);
-wire sbuf_s3_1_dec = (ibus_radr[15:11] == `OBUFS3_1_HEAD);
-wire sbuf_s4_1_dec = (ibus_radr[15:11] == `OBUFS4_1_HEAD);
-wire sbuf_s5_1_dec = (ibus_radr[15:11] == `OBUFS5_1_HEAD);
-wire sbuf_s0_2_dec = (ibus_radr[15:11] == `OBUFS0_2_HEAD);
-wire sbuf_s1_2_dec = (ibus_radr[15:11] == `OBUFS1_2_HEAD);
-wire sbuf_s2_2_dec = (ibus_radr[15:11] == `OBUFS2_2_HEAD);
-wire sbuf_s3_2_dec = (ibus_radr[15:11] == `OBUFS3_2_HEAD);
-wire sbuf_s4_2_dec = (ibus_radr[15:11] == `OBUFS4_2_HEAD);
-wire sbuf_s5_2_dec = (ibus_radr[15:11] == `OBUFS5_2_HEAD);
-wire sbuf_s0_3_dec = (ibus_radr[15:11] == `OBUFS0_3_HEAD);
-wire sbuf_s1_3_dec = (ibus_radr[15:11] == `OBUFS1_3_HEAD);
-wire sbuf_s2_3_dec = (ibus_radr[15:11] == `OBUFS2_3_HEAD);
-wire sbuf_s3_3_dec = (ibus_radr[15:11] == `OBUFS3_3_HEAD);
-wire sbuf_s4_3_dec = (ibus_radr[15:11] == `OBUFS4_3_HEAD);
-wire sbuf_s5_3_dec = (ibus_radr[15:11] == `OBUFS5_3_HEAD);
-wire sbuf_s0_4_dec = (ibus_radr[15:11] == `OBUFS0_4_HEAD);
-wire sbuf_s1_4_dec = (ibus_radr[15:11] == `OBUFS1_4_HEAD);
-wire sbuf_s2_4_dec = (ibus_radr[15:11] == `OBUFS2_4_HEAD);
-wire sbuf_s3_4_dec = (ibus_radr[15:11] == `OBUFS3_4_HEAD);
-wire sbuf_s4_4_dec = (ibus_radr[15:11] == `OBUFS4_4_HEAD);
-wire sbuf_s5_4_dec = (ibus_radr[15:11] == `OBUFS5_4_HEAD);
-wire sbuf_s0_5_dec = (ibus_radr[15:11] == `OBUFS0_5_HEAD);
-wire sbuf_s1_5_dec = (ibus_radr[15:11] == `OBUFS1_5_HEAD);
-wire sbuf_s2_5_dec = (ibus_radr[15:11] == `OBUFS2_5_HEAD);
-wire sbuf_s3_5_dec = (ibus_radr[15:11] == `OBUFS3_5_HEAD);
-wire sbuf_s4_5_dec = (ibus_radr[15:11] == `OBUFS4_5_HEAD);
-wire sbuf_s5_5_dec = (ibus_radr[15:11] == `OBUFS5_5_HEAD);
+wire sbuf_s0_0_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS00_00_HEAD });
+wire sbuf_s1_0_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS01_00_HEAD });
+wire sbuf_s2_0_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS02_00_HEAD });
+wire sbuf_s3_0_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS03_00_HEAD });
+wire sbuf_s4_0_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS04_00_HEAD });
+wire sbuf_s5_0_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS05_00_HEAD });
+wire sbuf_s0_1_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS00_01_HEAD });
+wire sbuf_s1_1_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS01_01_HEAD });
+wire sbuf_s2_1_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS02_01_HEAD });
+wire sbuf_s3_1_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS03_01_HEAD });
+wire sbuf_s4_1_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS04_01_HEAD });
+wire sbuf_s5_1_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS05_01_HEAD });
+wire sbuf_s0_2_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS00_02_HEAD });
+wire sbuf_s1_2_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS01_02_HEAD });
+wire sbuf_s2_2_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS02_02_HEAD });
+wire sbuf_s3_2_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS03_02_HEAD });
+wire sbuf_s4_2_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS04_02_HEAD });
+wire sbuf_s5_2_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS05_02_HEAD });
+wire sbuf_s0_3_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS00_03_HEAD });
+wire sbuf_s1_3_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS01_03_HEAD });
+wire sbuf_s2_3_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS02_03_HEAD });
+wire sbuf_s3_3_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS03_03_HEAD });
+wire sbuf_s4_3_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS04_03_HEAD });
+wire sbuf_s5_3_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS05_03_HEAD });
+wire sbuf_s0_4_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS00_04_HEAD });
+wire sbuf_s1_4_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS01_04_HEAD });
+wire sbuf_s2_4_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS02_04_HEAD });
+wire sbuf_s3_4_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS03_04_HEAD });
+wire sbuf_s4_4_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS04_04_HEAD });
+wire sbuf_s5_4_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS05_04_HEAD });
+wire sbuf_s0_5_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS00_05_HEAD });
+wire sbuf_s1_5_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS01_05_HEAD });
+wire sbuf_s2_5_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS02_05_HEAD });
+wire sbuf_s3_5_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS03_05_HEAD });
+wire sbuf_s4_5_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS04_05_HEAD });
+wire sbuf_s5_5_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS05_05_HEAD });
 reg sbuf_s0_0_dec_l1;
 reg sbuf_s0_0_dec_l2;
 

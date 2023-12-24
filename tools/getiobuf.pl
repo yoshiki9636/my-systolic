@@ -19,16 +19,16 @@ module iobuf(
 
 	input dma_io_we,
 	input [15:2] dma_io_wadr,
-	input [15:0] dma_io_wdata,
+	input [31:0] dma_io_wdata,
 	input [15:2] dma_io_radr,
-	input [15:0] dma_io_rdata_in,
-	output [15:0] dma_io_rdata,
+	input [31:0] dma_io_rdata_in,
+	output [31:0] dma_io_rdata,
 	// ram interface
 	input ibus_ren,
-	input [15:2] ibus_radr,
+	input [19:2] ibus_radr,
 	output [15:0] ibus_rdata,
 	input ibus_wen,
-	input [15:2] ibus_wadr,
+	input [19:2] ibus_wadr,
 	input [15:0] ibus_wdata,
 
 	// systolice array inbuffer interface
@@ -76,17 +76,17 @@ for ($j = 0; $j < $n; $j++) {
 print "	);\n";
 
 for ($j = 0; $j < $n; $j++) {
-	print "`define IBUFA${j}_HEAD 4'h$j\n";
+	printf("`define IBUFA%02x_HEAD 8'h%02x\n",$j,$j);
 }
 for ($j = 0; $j < $n; $j++) {
 	$j2 = $n + $j;
-	print "`define IBUFB${j}_HEAD 4'h$j2\n";
+	printf("`define IBUFB%02x_HEAD 8'h%02x\n",$j,$j2);
 }
-$ij = 0;
+
 for ($j = 0; $j < $n; $j++) {
 	for ($i = 0; $i < $n; $i++) {
-		print "`define OBUFS${i}_${j}_HEAD 5'h1${ij}\n";
-		$ij++;
+		$j3 = $j * $n + $i;
+		printf ( "`define OBUFS%02x_%02x_HEAD 8'h%02x\n",$i,$j,$j3);
 	}
 }
 
@@ -137,9 +137,9 @@ wire re_run_status = (dma_io_radr == `SYS_START_ADR);
 wire re_run_maxcntr = (dma_io_radr == `SYS_MAX_CNTR);
 wire re_run_runcntr = (dma_io_radr == `SYS_RUN_CNTR);
 
-assign dma_io_rdata = re_run_status ? { 15'd0, run_status } :
-					  re_run_maxcntr ? { 8'd0, max_cntr } :
-					  re_run_runcntr ? { 8'd0, run_cntr } : dma_io_rdata_in;
+assign dma_io_rdata = re_run_status ? { 16'd0, 15'd0, run_status } :
+					  re_run_maxcntr ? { 16'd0, 8'd0, max_cntr } :
+					  re_run_runcntr ? { 16'd0, 8'd0, run_cntr } : dma_io_rdata_in;
 
 // input buffer controls
 // write part
@@ -148,10 +148,10 @@ wire [9:0] abbus_wadr = ibus_wadr[11:2];
 
 
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_a${j}_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA${j}_HEAD);\n";
+	printf ("wire ibuf_a%d_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFA%02x_HEAD);\n", $j, $j);
 }
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_b${j}_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB${j}_HEAD);\n";
+	printf ("wire ibuf_b%d_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFB%02x_HEAD);\n", $j, $j);
 }
 
 print "
@@ -159,10 +159,10 @@ wire [9:0] abbus_radr = ibus_radr[11:2];
 ";
 
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_a${j}_dec = (ibus_radr[15:12] == `IBUFA${j}_HEAD);\n";
+	printf( "wire ibuf_a%d_dec = (ibus_radr[19:12] == `IBUFA%02x_HEAD);\n",$j,$j);
 }
 for ($j = 0; $j < $n; $j++) {
-	print "wire ibuf_b${j}_dec = (ibus_radr[15:12] == `IBUFB${j}_HEAD);\n";
+	printf( "wire ibuf_b%d_dec = (ibus_radr[19:12] == `IBUFB%02x_HEAD);\n",$j,$j);
 }
 for ($j = 0; $j < $n; $j++) {
 	print "wire ibuf_a${j}_ren = ibus_ren & ibuf_a${j}_dec;\n";
@@ -260,7 +260,7 @@ wire [8:0] sbus_radr = ibus_radr[10:2];
 
 for ($j = 0; $j < $n; $j++) {
 	for ($i = 0; $i < $n; $i++) {
-		print "wire sbuf_s${i}_${j}_dec = (ibus_radr[15:11] == `OBUFS${i}_${j}_HEAD);\n";
+		printf ("wire sbuf_s%d_%d_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS%02x_%02x_HEAD });\n", $i,$j,$i,$j);
 	}
 }
 

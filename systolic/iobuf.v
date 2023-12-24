@@ -14,16 +14,16 @@ module iobuf(
 
 	input dma_io_we,
 	input [15:2] dma_io_wadr,
-	input [15:0] dma_io_wdata,
+	input [31:0] dma_io_wdata,
 	input [15:2] dma_io_radr,
-	input [15:0] dma_io_rdata_in,
-	output [15:0] dma_io_rdata,
+	input [31:0] dma_io_rdata_in,
+	output [31:0] dma_io_rdata,
 	// ram interface
 	input ibus_ren,
-	input [15:2] ibus_radr,
+	input [19:2] ibus_radr,
 	output [15:0] ibus_rdata,
 	input ibus_wen,
-	input [15:2] ibus_wadr,
+	input [19:2] ibus_wadr,
 	input [15:0] ibus_wdata,
 
 	// systolice array inbuffer interface
@@ -55,14 +55,14 @@ module iobuf(
 	input sw0_1,
 	input sw1_1
 	);
-`define IBUFA0_HEAD 4'h0
-`define IBUFA1_HEAD 4'h1
-`define IBUFB0_HEAD 4'h2
-`define IBUFB1_HEAD 4'h3
-`define OBUFS0_0_HEAD 5'h10
-`define OBUFS1_0_HEAD 5'h11
-`define OBUFS0_1_HEAD 5'h12
-`define OBUFS1_1_HEAD 5'h13
+`define IBUFA00_HEAD 8'h00
+`define IBUFA01_HEAD 8'h01
+`define IBUFB00_HEAD 8'h02
+`define IBUFB01_HEAD 8'h03
+`define OBUFS00_00_HEAD 8'h00
+`define OBUFS01_00_HEAD 8'h01
+`define OBUFS00_01_HEAD 8'h02
+`define OBUFS01_01_HEAD 8'h03
 `define SYS_START_ADR 14'h3FF8
 `define SYS_MAX_CNTR 14'h3FF9
 `define SYS_RUN_CNTR 14'h3FFa
@@ -108,23 +108,23 @@ wire re_run_status = (dma_io_radr == `SYS_START_ADR);
 wire re_run_maxcntr = (dma_io_radr == `SYS_MAX_CNTR);
 wire re_run_runcntr = (dma_io_radr == `SYS_RUN_CNTR);
 
-assign dma_io_rdata = re_run_status ? { 15'd0, run_status } :
-					  re_run_maxcntr ? { 8'd0, max_cntr } :
-					  re_run_runcntr ? { 8'd0, run_cntr } : dma_io_rdata_in;
+assign dma_io_rdata = re_run_status ? { 16'd0, 15'd0, run_status } :
+					  re_run_maxcntr ? { 16'd0, 8'd0, max_cntr } :
+					  re_run_runcntr ? { 16'd0, 8'd0, run_cntr } : dma_io_rdata_in;
 
 // input buffer controls
 // write part
 wire [9:0] abbus_wadr = ibus_wadr[11:2];
-wire ibuf_a0_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA0_HEAD);
-wire ibuf_a1_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFA1_HEAD);
-wire ibuf_b0_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB0_HEAD);
-wire ibuf_b1_wen = ibus_wen & (ibus_wadr[15:12] == `IBUFB1_HEAD);
+wire ibuf_a0_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFA00_HEAD);
+wire ibuf_a1_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFA01_HEAD);
+wire ibuf_b0_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFB00_HEAD);
+wire ibuf_b1_wen = ibus_wen & (ibus_wadr[19:12] == `IBUFB01_HEAD);
 
 wire [9:0] abbus_radr = ibus_radr[11:2];
-wire ibuf_a0_dec = (ibus_radr[15:12] == `IBUFA0_HEAD);
-wire ibuf_a1_dec = (ibus_radr[15:12] == `IBUFA1_HEAD);
-wire ibuf_b0_dec = (ibus_radr[15:12] == `IBUFB0_HEAD);
-wire ibuf_b1_dec = (ibus_radr[15:12] == `IBUFB1_HEAD);
+wire ibuf_a0_dec = (ibus_radr[19:12] == `IBUFA00_HEAD);
+wire ibuf_a1_dec = (ibus_radr[19:12] == `IBUFA01_HEAD);
+wire ibuf_b0_dec = (ibus_radr[19:12] == `IBUFB00_HEAD);
+wire ibuf_b1_dec = (ibus_radr[19:12] == `IBUFB01_HEAD);
 wire ibuf_a0_ren = ibus_ren & ibuf_a0_dec;
 wire ibuf_a1_ren = ibus_ren & ibuf_a1_dec;
 wire ibuf_b0_ren = ibus_ren & ibuf_b0_dec;
@@ -256,10 +256,10 @@ abbuf b1buf (
 // read part
 wire [8:0] sbus_radr = ibus_radr[10:2];
 
-wire sbuf_s0_0_dec = (ibus_radr[15:11] == `OBUFS0_0_HEAD);
-wire sbuf_s1_0_dec = (ibus_radr[15:11] == `OBUFS1_0_HEAD);
-wire sbuf_s0_1_dec = (ibus_radr[15:11] == `OBUFS0_1_HEAD);
-wire sbuf_s1_1_dec = (ibus_radr[15:11] == `OBUFS1_1_HEAD);
+wire sbuf_s0_0_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS00_00_HEAD });
+wire sbuf_s1_0_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS01_00_HEAD });
+wire sbuf_s0_1_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS00_01_HEAD });
+wire sbuf_s1_1_dec = (ibus_radr[19:11] == { 1'b1, `OBUFS01_01_HEAD });
 reg sbuf_s0_0_dec_l1;
 reg sbuf_s0_0_dec_l2;
 
