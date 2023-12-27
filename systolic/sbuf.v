@@ -43,18 +43,20 @@ end
 
 
 assign s_running_pre = |run_s_cntr;
-reg s_running_d1;
 
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n)
-        s_running_d1 <= 1'b0;
-	else
-        s_running_d1 <= s_running_pre;
-end
+//reg s_running_d1;
 
-assign s_running = s_running_pre | s_running_d1;
+//always @ (posedge clk or negedge rst_n) begin
+    //if (~rst_n)
+        //s_running_d1 <= 1'b0;
+	//else
+        //s_running_d1 <= s_running_pre;
+//end
+
+//assign s_running = s_running_pre | s_running_d1;
+assign s_running = s_running_pre;
 //assign finish = ~s_running & s_running_d1;
-assign finish = (run_s_cntr == 8'd0) & sw;
+assign finish = (run_s_cntr == 8'd1) & sw;
 
 // outbuffer controls
 // read part
