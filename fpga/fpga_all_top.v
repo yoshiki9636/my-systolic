@@ -17,12 +17,25 @@ module fpga_all_top(
 	input rx,
 	output tx,
 	input interrupt_0,
-	output [2:0] rgb_led
+	output [2:0] rgb_led,
+	output [2:0] rgb_led1,
+	output [2:0] rgb_led2,
+	output [2:0] rgb_led3
 
 	);
 
-wire [13:2] d_ram_radr;
-wire [13:2] d_ram_wadr;
+`ifdef TANG_PRIMER
+parameter DWIDTH = 12;
+//parameter DWIDTH = 14;
+`endif
+`ifdef ARTY_A7
+//parameter DWIDTH = 12;
+parameter DWIDTH = 14;
+`endif
+
+
+wire [DWIDTH+1:2] d_ram_radr;
+wire [DWIDTH+1:2] d_ram_wadr;
 wire [31:0] d_ram_rdata;
 wire [31:0] d_ram_wdata;
 wire d_ram_wen;
@@ -61,6 +74,8 @@ wire stdby = 1'b0 ;
 //wire tx_fifo_overrun;
 //wire tx_fifo_underrun;
 
+//wire [2:0] dummy_led3;
+//assign rgb_led3 = { 2'b00, dbg_run_status };
 
 `ifdef ARTY_A7
 wire locked;
@@ -89,7 +104,7 @@ pll pll (
 	);
 `endif
 
-cpu_top cpu_top (
+cpu_top #(.DWIDTH(DWIDTH)) cpu_top (
 	.clk(clk),
 	.rst_n(rst_n),
 	.cpu_start(cpu_start),
@@ -122,7 +137,7 @@ cpu_top cpu_top (
 	.interrupt_0(interrupt_0)
 	);
 
-systolic16 systolic (
+systolic36 systolic (
 	.clk(clk),
 	.rst_n(rst_n),
 	.dma_io_we(dma_io_we),
@@ -137,9 +152,10 @@ systolic16 systolic (
 	.ibus_wen(ibus_wen),
 	.ibus_wadr(ibus_wadr),
 	.ibus_wdata(ibus32_wdata)
+	//.dbg_run_status(dbg_run_status)
 	);
 
-uart_top uart_top (
+uart_top #(.DWIDTH(DWIDTH)) uart_top (
 	.clk(clk),
 	.rst_n(rst_n),
 	.rx(rx),
@@ -172,7 +188,10 @@ io_led io_led (
 	.dma_io_radr(dma_io_radr),
 	.dma_io_rdata_in(dma_io_rdata_in),
 	.dma_io_rdata(dma_io_rdata_io),
-	.rgb_led(rgb_led)
+	.rgb_led(rgb_led),
+	.rgb_led1(rgb_led1),
+	.rgb_led2(rgb_led2),
+	.rgb_led3(rgb_led3)
 
 	);
 endmodule
