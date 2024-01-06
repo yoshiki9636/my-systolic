@@ -50,7 +50,7 @@ always @ (posedge clk or negedge rst_n) begin
 end
 
 // address selector
-wire [9:0] buf_ab_radr = ren ? abbus_radr : ibuf_ab_radri;
+wire [8:0] buf_ab_radr = ren ? abbus_radr[8:0] : ibuf_ab_radri[8:0];
 
 // input buffers
 

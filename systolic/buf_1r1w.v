@@ -10,16 +10,16 @@
 
 module buf_1r1w(
 	input clk,
-	input [9:0] ram_radr,
+	input [8:0] ram_radr,
 	output [15:0] ram_rdata,
-	input [9:0] ram_wadr,
+	input [8:0] ram_wadr,
 	input [15:0] ram_wdata,
 	input ram_wen
 	);
 
 // 16x1024 1r1w RAM
-reg[15:0] ram[0:1023];
-reg[9:0] radr;
+reg[15:0] ram[0:512];
+reg[8:0] radr;
 
 always @ (posedge clk) begin
 	if (ram_wen)

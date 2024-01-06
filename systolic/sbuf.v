@@ -56,7 +56,20 @@ assign s_running_pre = |run_s_cntr;
 //assign s_running = s_running_pre | s_running_d1;
 assign s_running = s_running_pre;
 //assign finish = ~s_running & s_running_d1;
-assign finish = (run_s_cntr == 8'd1) & sw;
+wire finish_pre = (run_s_cntr == 8'd1) & sw;
+
+// for debugging
+reg finish_post;
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n)
+        finish_post <= 1'b0;
+	else
+        finish_post <=  finish_pre;
+end
+
+assign finish = finish_pre | finish_post;
+
 
 // outbuffer controls
 // read part
@@ -73,26 +86,26 @@ always @ (posedge clk or negedge rst_n) begin
 end
 
 
-wire [7:0] obus_radr = sbus_radr[7:0];
+wire [6:0] obus_radr = sbus_radr[6:0];
 assign sbus_rdata = sbus_rsel ? sbuf_sa_rdata : sbuf_s_rdata;
 
 // write part
 
-reg [7:0] sbuf_s_wadr;
+reg [6:0] sbuf_s_wadr;
 // s0 buffer's address
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
-        sbuf_s_wadr <= 8'd0;
+        sbuf_s_wadr <= 7'd0;
     else if (start)
-        sbuf_s_wadr <= 8'd0;
+        sbuf_s_wadr <= 7'd0;
 	else if (s_running & sw)
-        sbuf_s_wadr <= sbuf_s_wadr + 8'd1;
+        sbuf_s_wadr <= sbuf_s_wadr + 7'd1;
 end
 
 // satuation bits buffer
 reg [3:0] sat_cntr;
 reg [15:0] sat_agg;
-reg [7:0] sbuf_sa_wadr;
+reg [6:0] sbuf_sa_wadr;
 
 // satuation bit counter
 always @ (posedge clk or negedge rst_n) begin
@@ -121,11 +134,11 @@ end
 // address counter
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n)
-        sbuf_sa_wadr <= 8'd0;
+        sbuf_sa_wadr <= 7'd0;
     else if (start)
-        sbuf_sa_wadr <= 8'd0;
+        sbuf_sa_wadr <= 7'd0;
 	else if (sat_wen)
-        sbuf_sa_wadr <= sbuf_sa_wadr + 8'd1;
+        sbuf_sa_wadr <= sbuf_sa_wadr + 7'd1;
 end
 
 // output buffers
