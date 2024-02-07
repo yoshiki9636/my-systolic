@@ -179,7 +179,7 @@ If you want to run the synthesis result on Arty A7, write systolic_test_whole_ge
 
 # 使用方法
 ## RTLシミュレーション（デフォルト 2x2を使用する場合）
-・本レポジトリおよび、[my-riscv-rv32i](https://github.com/yoshiki9636/my-riscv-rv32i)をクローンしてください。
+・本レポジトリ~~および、[my-riscv-rv32i](https://github.com/yoshiki9636/my-riscv-rv32i)~~をクローンしてください。
 
 ・./fsimディレクトリを作成し、以下のファイルをコピーしてください。
  ・rtls
@@ -190,22 +190,23 @@ If you want to run the synthesis result on Arty A7, write systolic_test_whole_ge
   
   my-systolic/sim/fullsimtop.v
   
-  my-riscv-rv32i/cpu/*.v
+  my-systolic/cpu/*.v
   
-  my-riscv-rv32i/io/*.v
+  my-systolic/io/*.v
   
-  my-riscv-rv32i/mon/*.v
+  my-systolic/mon/*.v
   
-  my-riscv-rv32i/sim/pll_sim.v
+  my-systolic/sim/pll_sim.v
 
 ・fpga_all_top.vを開いて、defineをTANG_PRIMERに変更
 
 ・my-systolic/asmに入り、以下を実行
-  $ ./riscv-asm1.pl systolic_test4.asm > ../fsim/test.txt
+  $ ./riscv-asm1.pl systolic_test_whole_gen.asm > ../fsim/test.txt
 
-・my-systolic/fsimに入り、以下を実行
-  $ python3 ../tools/matrix_file_gen.py 64 2 a2.csv b2.csv c2.txt
+  $ python3 ../tools/matrix_file_gen2.py 64 a2.csv b2.csv c2.txt
   $ ../tools/split.pl c2.txt
+  $ mv test*txt ../fsim
+・my-systolic/fsimに入る
 
 これで実行に必要なファイルはfsimにそろいました。各自のRTLシミュレータでシミュレーション実行してください。筆者はintelの無償提供版のModelsimを使用しています。
 
