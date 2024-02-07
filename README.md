@@ -25,7 +25,7 @@ No Gather/Scatter function. Need to read out the submatrix by yourself and rearr
 
 # Usage
 ## RTL simulation (using default 2x2)
-Clone this repository and [my-riscv-rv32i](https://github.com/yoshiki9636/my-riscv-rv32i).
+Clone this repository. ~~and [my-riscv-rv32i](https://github.com/yoshiki9636/my-riscv-rv32i).~~
 
 . Create the /fsim directory and copy the following files
  ... rtls
@@ -36,22 +36,23 @@ Clone this repository and [my-riscv-rv32i](https://github.com/yoshiki9636/my-ris
   
   my-systolic/sim/fullsimtop.v
   
-  my-riscv-rv32i/cpu/*.v
+  my-systolic/cpu/*.v
   
-  my-riscv-rv32i/io/*.v
+  my-systolic/io/*.v
   
-  my-riscv-rv32i/mon/*.v
+  my-systolic/mon/*.v
   
-  my-riscv-rv32i/sim/pll_sim.v
+  my-systolic/sim/pll_sim.v
 
 Open fpga_all_top.v and change define to TANG_PRIMER
 
 Enter my-systolic/asm and execute the following
-  $ ./riscv-asm1.pl systolic_test4.asm > ../fsim/test.txt
+  $ ./riscv-asm1.pl systolic_test_whole_gen.asm  > ../fsim/test.txt
 
-Enter my-systolic/fsim and execute the following
-  $ python3 ../tools/matrix_file_gen.py 64 2 a2.csv b2.csv c2.txt
+  $ python3 ../tools/matrix_file_gen2.py 64 a2.csv b2.csv c2.txt
   $ ../tools/split.pl c2.txt
+  $ mv test*txt ../fsim
+Enter to my-systolic/fsim 
 
 Now you have all the files you need to run the simulation in fsim. Please run the simulation on your RTL simulator. The author uses Modelsim, a free version provided by intel.
 
